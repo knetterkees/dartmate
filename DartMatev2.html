@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DartMate">
+<title>DartMate</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & ROOT ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+:root {
+  --bg: #09090f;
+  --s1: #111118;
+  --s2: #18181f;
+  --s3: #222229;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --accent: #d4ff47;
+  --accent-dim: rgba(212,255,71,0.12);
+  --green: #47ffb2;
+  --green-dim: rgba(71,255,178,0.1);
+  --red: #ff5252;
+  --red-dim: rgba(255,82,82,0.1);
+  --orange: #ff9f47;
+  --blue: #47aaff;
+  --blue-dim: rgba(71,170,255,0.1);
+  --text: #f0f0f4;
+  --muted: #6b6b78;
+  --muted2: #9090a0;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 18px;
+  --r-xl: 22px;
+  --nav-h: 76px;
+  --safe-top: env(safe-area-inset-top, 44px);
+}
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-body); overflow: hidden; }
+
+/* ============ APP SHELL ============ */
+#app {
+  position: fixed;
+  inset: 0;
+  max-width: 430px;
+  margin: 0 auto;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ============ SCREENS ============ */
+.screen {
+  position: absolute;
+  inset: 0;
+  bottom: var(--nav-h);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(30px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  will-change: opacity, transform;
+}
+.screen.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+/* ============ SCROLL AREA ============ */
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 16px 24px;
+}
+.scroll::-webkit-scrollbar { display: none; }
+
+/* ============ SCREEN HEADER ============ */
+.sh {
+  padding: calc(var(--safe-top) + 12px) 16px 14px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+.sh-back {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--s2);
+  border: 0.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; color: var(--text);
+  flex-shrink: 0;
+}
+.sh-titles { flex: 1; }
+.sh-title { font-family: var(--font-display); font-size: 30px; letter-spacing: 0.03em; line-height: 1; }
+.sh-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.sh-action { margin-left: auto; flex-shrink: 0; }
+
+/* ============ BOTTOM NAV ============ */
+#nav {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  background: var(--s1);
+  border-top: 0.5px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 10px;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  z-index: 100;
+}
+.nav-btn {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+  cursor: pointer;
+  padding: 4px 0;
+  background: none; border: none;
+}
+.nav-icon { font-size: 22px; transition: transform 0.15s; }
+.nav-label { font-size: 10px; color: var(--muted); letter-spacing: 0.04em; transition: color 0.15s; }
+.nav-btn.active .nav-label { color: var(--accent); }
+.nav-btn.active .nav-icon { transform: scale(1.1); }
+
+/* ============ CARDS ============ */
+.card {
+  background: var(--s1);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.card-inset {
+  background: var(--s2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+
+/* ============ SECTION LABEL ============ */
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 20px 0 8px;
+}
+.section-label:first-child { margin-top: 4px; }
+
+/* ============ PLAYER CARD ============ */
+.player-card {
+  background: var(--s1);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: border-color 0.2s;
+}
+.player-card.active-turn { border-color: var(--accent); }
+.player-card.active-turn .pc-score { color: var(--accent); }
+.pc-avatar {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 17px;
+  flex-shrink: 0;
+}
+.pc-info { flex: 1; min-width: 0; }
+.pc-name { font-size: 15px; font-weight: 500; }
+.pc-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.pc-darts { display: flex; gap: 3px; margin-top: 5px; }
+.pc-dart { width: 6px; height: 6px; border-radius: 50%; background: var(--s3); border: 0.5px solid var(--border2); transition: background 0.15s; }
+.pc-dart.hit { background: var(--accent); border-color: var(--accent); }
+.pc-score { font-family: var(--font-display); font-size: 38px; line-height: 1; color: var(--muted2); transition: color 0.2s; }
+
+/* ============ STAT GRID ============ */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.stat-box {
+  background: var(--s1);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 12px;
+}
+.stat-val { font-family: var(--font-display); font-size: 30px; line-height: 1; color: var(--accent); }
+.stat-lbl { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+/* ============ BUTTONS ============ */
+.btn {
+  display: block; width: 100%;
+  padding: 14px 20px;
+  border-radius: var(--r-md);
+  border: none;
+  font-family: var(--font-body);
+  font-size: 15px; font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  text-align: center;
+}
+.btn:active { transform: scale(0.97); }
+.btn + .btn { margin-top: 8px; }
+.btn-primary { background: var(--accent); color: #09090f; }
+.btn-secondary { background: var(--s2); color: var(--text); border: 0.5px solid var(--border); }
+.btn-danger { background: var(--red-dim); color: var(--red); border: 0.5px solid rgba(255,82,82,0.25); }
+.btn:disabled { opacity: 0.4; pointer-events: none; }
+
+/* ============ INPUTS ============ */
+.field { margin-bottom: 12px; }
+.field-label { font-size: 11px; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; }
+.field-input {
+  width: 100%;
+  background: var(--s2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.field-input:focus { border-color: var(--accent); }
+.field-input::placeholder { color: var(--muted); }
+
+/* ============ TOGGLE ============ */
+.toggle-row {
+  display: flex; align-items: center;
+  padding: 13px 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.toggle-row:last-child { border-bottom: none; }
+.toggle-info { flex: 1; }
+.toggle-name { font-size: 14px; font-weight: 500; }
+.toggle-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.toggle-sw {
+  width: 44px; height: 26px;
+  background: var(--s3);
+  border-radius: 13px;
+  position: relative;
+  cursor: pointer;
+  border: 0.5px solid var(--border);
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.toggle-sw.on { background: var(--accent); border-color: var(--accent); }
+.toggle-sw::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform 0.2s, background 0.2s;
+}
+.toggle-sw.on::after { transform: translateX(18px); background: #09090f; }
+
+/* ============ BADGE ============ */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px; font-weight: 500;
+}
+.badge-accent { background: var(--accent-dim); color: var(--accent); }
+.badge-green { background: var(--green-dim); color: var(--green); }
+.badge-red { background: var(--red-dim); color: var(--red); }
+.badge-blue { background: var(--blue-dim); color: var(--blue); }
+
+/* ============ CONN STATUS BAR ============ */
+.conn-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 14px;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+.conn-bar.connected { background: var(--green-dim); color: var(--green); border: 0.5px solid rgba(71,255,178,0.2); }
+.conn-bar.disconnected { background: var(--red-dim); color: var(--red); border: 0.5px solid rgba(255,82,82,0.2); }
+.conn-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.conn-bar.connected .conn-dot { animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ============ THROW FEED ============ */
+.throw-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.throw-row:last-child { border-bottom: none; }
+.throw-badge {
+  width: 46px; height: 46px;
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.throw-info { flex: 1; }
+.throw-player { font-size: 13px; font-weight: 500; }
+.throw-detail { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.throw-time { font-size: 11px; color: var(--muted); }
+
+/* ============ DART INPUT MODAL ============ */
+#modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+}
+#modal-bg.show { display: flex; }
+.modal-sheet {
+  background: var(--s1);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  padding: 14px 16px calc(env(safe-area-inset-bottom, 0px) + 20px);
+  width: 100%; max-width: 430px;
+}
+.modal-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 14px; }
+
+/* Dart slots */
+.dart-slots { display: flex; gap: 8px; margin-bottom: 14px; }
+.dart-slot {
+  flex: 1; height: 52px;
+  background: var(--s2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 18px;
+  color: var(--muted); transition: border-color 0.15s;
+  position: relative;
+}
+.dart-slot.active { border-color: var(--accent); color: var(--accent); }
+.dart-slot.done { color: var(--text); border-color: var(--border2); }
+.dart-slot.done.is-double { border-color: rgba(71,170,255,0.5); color: var(--blue); }
+.dart-slot.done.is-triple { border-color: rgba(212,255,71,0.6); color: var(--accent); }
+.dart-slot.done.is-miss   { border-color: rgba(255,82,82,0.4); color: var(--red); }
+.dart-slot-num { font-size: 10px; position: absolute; top: 4px; left: 7px; color: var(--muted); font-family: var(--font-body); }
+
+/* Multiplier buttons */
+.mult-row { display: flex; gap: 6px; margin-bottom: 10px; }
+.mult-btn {
+  flex: 1; height: 46px;
+  background: var(--s2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; color: var(--muted);
+  transition: all 0.12s; user-select: none;
+}
+.mult-btn:active { transform: scale(0.95); }
+.mult-btn.sel-S { background: var(--s3); color: var(--text); border-color: var(--border2); }
+.mult-btn.sel-D { background: var(--blue-dim); color: var(--blue); border-color: rgba(71,170,255,0.4); }
+.mult-btn.sel-T { background: var(--accent-dim); color: var(--accent); border-color: rgba(212,255,71,0.5); }
+.mult-btn.miss-btn { flex: 0.6; font-size: 12px; }
+.mult-btn.miss-btn.sel-M { background: var(--red-dim); color: var(--red); border-color: rgba(255,82,82,0.4); }
+
+/* Number grid */
+.num-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px; margin-bottom: 10px;
+}
+.num-btn {
+  height: 38px;
+  background: var(--s2);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 17px;
+  cursor: pointer; color: var(--text);
+  transition: background 0.1s, transform 0.08s;
+  user-select: none;
+}
+.num-btn:active { transform: scale(0.9); background: var(--s3); }
+.num-btn.disabled { opacity: 0.25; pointer-events: none; }
+.num-btn.bull-btn {
+  grid-column: span 2;
+  font-family: var(--font-body); font-size: 13px; font-weight: 500;
+}
+
+/* Turn summary row */
+.turn-summary {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0 0;
+  border-top: 0.5px solid var(--border);
+}
+.ts-score { font-family: var(--font-display); font-size: 28px; color: var(--accent); }
+.ts-remaining { font-size: 12px; color: var(--muted); text-align: right; }
+.ts-remaining strong { display: block; font-size: 16px; color: var(--text); font-family: var(--font-display); }
+
+/* ============ CHECKOUT HINT ============ */
+.checkout-hint {
+  background: var(--accent-dim);
+  border: 0.5px solid rgba(212,255,71,0.3);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: none;
+}
+.checkout-hint.show { display: block; }
+.co-dart {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(212,255,71,0.18);
+  border: 0.5px solid rgba(212,255,71,0.4);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  min-width: 44px;
+}
+.co-dart.double { background: rgba(212,255,71,0.28); border-color: rgba(212,255,71,0.6); }
+.co-dart.triple { background: rgba(212,255,71,0.35); border-color: var(--accent); }
+.co-dart.bull   { background: rgba(255,82,82,0.2);   border-color: rgba(255,82,82,0.5); color: #ff8080; }
+.co-arrow { color: rgba(212,255,71,0.4); font-size: 14px; align-self: center; }
+
+/* ============ MUSIC GRID ============ */
+.music-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.music-card {
+  background: var(--s1);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+}
+.music-card:active { transform: scale(0.95); }
+.music-card.playing { border-color: var(--accent); background: var(--accent-dim); }
+.music-card .mc-icon { font-size: 28px; margin-bottom: 6px; }
+.music-card .mc-label { font-size: 12px; color: var(--muted); }
+.music-card.playing .mc-label { color: var(--accent); }
+
+/* ============ SETTINGS ROWS ============ */
+.settings-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 0;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer;
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-icon {
+  width: 34px; height: 34px;
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.settings-text { flex: 1; }
+.settings-name { font-size: 14px; font-weight: 500; }
+.settings-desc { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.settings-chevron { color: var(--muted); font-size: 16px; }
+
+/* ============ GAME CHIPS ============ */
+.chip-row { display: flex; gap: 7px; margin-bottom: 14px; flex-wrap: wrap; }
+.chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 0.5px solid var(--border);
+  background: var(--s1);
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+}
+.chip.active { background: var(--accent); color: #09090f; border-color: var(--accent); }
+
+/* ============ TOAST ============ */
+#toast {
+  position: fixed;
+  bottom: calc(var(--nav-h) + 12px);
+  left: 50%; transform: translateX(-50%);
+  background: var(--s3);
+  color: var(--text);
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 14px; font-weight: 500;
+  z-index: 999;
+  white-space: nowrap;
+  pointer-events: none;
+  display: none;
+  border: 0.5px solid var(--border2);
+  transition: opacity 0.3s;
+}
+#toast.special { background: var(--accent); color: #09090f; border-color: var(--accent); }
+
+/* ============ HOME LOGO ============ */
+.home-logo-area {
+  padding: calc(var(--safe-top) + 10px) 16px 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.home-logo { font-family: var(--font-display); font-size: 42px; letter-spacing: 0.05em; }
+.home-logo span { color: var(--accent); }
+.home-tagline { font-size: 12px; color: var(--muted); margin: 2px 0 16px 16px; }
+.gear-btn {
+  background: var(--s2); border: 0.5px solid var(--border);
+  border-radius: 50%; width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; cursor: pointer; flex-shrink: 0;
+  margin-top: 8px;
+}
+
+/* ============ STATUS FEEDBACK ============ */
+.status-msg {
+  display: none;
+  align-items: center; gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+.status-msg.show { display: flex; }
+.status-msg.loading { background: var(--accent-dim); color: var(--accent); border: 0.5px solid rgba(212,255,71,0.2); }
+.status-msg.success { background: var(--green-dim); color: var(--green); border: 0.5px solid rgba(71,255,178,0.2); }
+.status-msg.error { background: var(--red-dim); color: var(--red); border: 0.5px solid rgba(255,82,82,0.2); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { width: 13px; height: 13px; border: 2px solid rgba(212,255,71,0.3); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+
+
+/* ============ UNDO / EDIT ============ */
+.undo-bar {
+  display: flex; gap: 8px; margin-bottom: 10px;
+}
+.undo-btn {
+  flex: 1; height: 40px;
+  background: var(--s2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; font-size: 13px; font-weight: 500;
+  color: var(--muted2); cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.undo-btn:active { background: var(--s3); }
+.undo-btn.enabled { color: var(--text); border-color: var(--border2); }
+.undo-btn.enabled:active { background: var(--s3); }
+
+/* Edit turn modal */
+#edit-modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.65); z-index: 210;
+  align-items: flex-end; justify-content: center;
+}
+#edit-modal-bg.show { display: flex; }
+.edit-sheet {
+  background: var(--s1);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  padding: 14px 16px calc(env(safe-area-inset-bottom,0px) + 20px);
+  width: 100%; max-width: 430px;
+}
+.edit-title { font-family: var(--font-display); font-size: 22px; margin-bottom: 4px; }
+.edit-sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.edit-darts { display: flex; gap: 8px; margin-bottom: 14px; }
+.edit-dart {
+  flex: 1; background: var(--s2); border: 0.5px solid var(--border);
+  border-radius: var(--r-md); padding: 10px 8px; text-align: center;
+  cursor: pointer; transition: border-color 0.15s;
+}
+.edit-dart.selected { border-color: var(--accent); background: var(--accent-dim); }
+.edit-dart-num { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+.edit-dart-val { font-family: var(--font-display); font-size: 20px; color: var(--text); }
+.edit-dart-val.is-double { color: var(--blue); }
+.edit-dart-val.is-triple { color: var(--accent); }
+.edit-dart-val.is-miss   { color: var(--red); }
+.edit-note { font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 12px; }
+
+/* ============ WS LOG ============ */
+.ws-log { background: var(--s2); border-radius: var(--r-sm); padding: 10px 12px; font-family: monospace; font-size: 11px; color: var(--muted); max-height: 80px; overflow-y: auto; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== SCREEN: HOME ===== -->
+  <div class="screen active" id="screen-home">
+    <div class="home-logo-area">
+      <div>
+        <div class="home-logo">Dart<span>Mate</span></div>
+      </div>
+      <div class="gear-btn" onclick="nav('settings')">⚙️</div>
+    </div>
+    <div class="home-tagline">Jouw dartbord companion</div>
+    <div class="scroll">
+      <div id="home-conn-bar" class="conn-bar disconnected">
+        <div class="conn-dot"></div>
+        <span id="home-conn-text">Niet verbonden — ga naar Instellingen</span>
+      </div>
+      <div class="chip-row" id="game-chips">
+        <div class="chip active" data-game="501" onclick="selectGame(this)">501</div>
+        <div class="chip" data-game="301" onclick="selectGame(this)">301</div>
+        <div class="chip" data-game="Cricket" onclick="selectGame(this)">Cricket</div>
+        <div class="chip" data-game="Around" onclick="selectGame(this)">Around the Clock</div>
+      </div>
+      <div class="section-label">Spelers</div>
+      <div id="home-players"></div>
+      <div class="section-label">Snel starten</div>
+      <button class="btn btn-primary" onclick="startGame()">Nieuw spel starten</button>
+      <button class="btn btn-secondary" style="margin-top:8px" onclick="nav('players')">Spelers beheren</button>
+      <div class="section-label">Recente worpen</div>
+      <div class="card" id="home-throws">
+        <div style="text-align:center;padding:18px 0;color:var(--muted);font-size:13px;">Nog geen worpen</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: GAME ===== -->
+  <div class="screen" id="screen-game">
+    <div class="sh">
+      <div class="sh-back" onclick="nav('home')">←</div>
+      <div class="sh-titles">
+        <div class="sh-title" id="game-title">501</div>
+        <div class="sh-sub" id="game-sub">Beurt 1 · Markpaul gooit</div>
+      </div>
+      <div class="sh-action"><span class="badge badge-accent" id="game-leg-badge">Leg 1</span></div>
+    </div>
+    <div class="scroll">
+      <div id="game-players"></div>
+      <div class="checkout-hint" id="checkout-hint">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+          <span>🎯</span>
+          <span style="font-size:11px;letter-spacing:0.08em;font-weight:500">CHECKOUT</span>
+          <span id="checkout-darts-count" style="margin-left:auto;font-size:10px;opacity:0.7"></span>
+        </div>
+        <div id="checkout-darts" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+      </div>
+      <button class="btn btn-primary" onclick="openKeypad()">Score invoeren</button>
+      <div class="undo-bar" style="margin-top:8px">
+        <div class="undo-btn" id="undo-btn" onclick="undoTurn()">↩ Ongedaan maken</div>
+        <div class="undo-btn" id="edit-btn" onclick="openEditTurn()">✏ Beurt aanpassen</div>
+      </div>
+      <div class="section-label" style="margin-top:18px">Deze leg</div>
+      <div class="stat-grid" id="game-stats"></div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: STATS ===== -->
+  <div class="screen" id="screen-stats">
+    <div class="sh">
+      <div class="sh-titles">
+        <div class="sh-title">Statistieken</div>
+        <div class="sh-sub">Alle sessies</div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div id="stats-content"></div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: PLAYERS ===== -->
+  <div class="screen" id="screen-players">
+    <div class="sh">
+      <div class="sh-back" onclick="nav('home')">←</div>
+      <div class="sh-titles">
+        <div class="sh-title">Spelers</div>
+        <div class="sh-sub">Beheer je groep</div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div id="players-list"></div>
+      <div class="field" style="margin-top:4px">
+        <div class="field-label">Naam toevoegen</div>
+        <div style="display:flex;gap:8px">
+          <input class="field-input" style="flex:1" id="new-player-input" type="text" placeholder="Naam of gamertag..." maxlength="20">
+          <button class="btn btn-primary" style="width:auto;padding:12px 18px;margin:0" onclick="addPlayer()">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: MUSIC ===== -->
+  <div class="screen" id="screen-music">
+    <div class="sh">
+      <div class="sh-titles">
+        <div class="sh-title">Sfeer</div>
+        <div class="sh-sub">Muziek & geluidseffecten</div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="section-label">Walkup muziek</div>
+      <div class="music-grid">
+        <div class="music-card" onclick="playMusic(this,'🎸','Rock Anthem')"><div class="mc-icon">🎸</div><div class="mc-label">Rock Anthem</div></div>
+        <div class="music-card" onclick="playMusic(this,'🎺','Hype Brass')"><div class="mc-icon">🎺</div><div class="mc-label">Hype Brass</div></div>
+        <div class="music-card" onclick="playMusic(this,'🎵','Darts Classic')"><div class="mc-icon">🎵</div><div class="mc-label">Darts Classic</div></div>
+        <div class="music-card" onclick="playMusic(this,'🔥','Fire Mode')"><div class="mc-icon">🔥</div><div class="mc-label">Fire Mode</div></div>
+        <div class="music-card" onclick="playMusic(this,'😌','Chill Beats')"><div class="mc-icon">😌</div><div class="mc-label">Chill Beats</div></div>
+        <div class="music-card" onclick="playMusic(this,'🎤','Crowd Noise')"><div class="mc-icon">🎤</div><div class="mc-label">Crowd Noise</div></div>
+      </div>
+      <div class="section-label">Geluidseffecten</div>
+      <div class="card">
+        <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">180 fanfare</div><div class="toggle-desc">Groot geluid bij perfecte worp</div></div><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Checkout klokken</div><div class="toggle-desc">Victorie geluid bij leg winst</div></div><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Bust trombone</div><div class="toggle-desc">Trieste toon bij bust</div></div><div class="toggle-sw" onclick="this.classList.toggle('on')"></div></div>
+        <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Crowd applaus</div><div class="toggle-desc">Publiek bij hoge scores</div></div><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></div>
+      </div>
+      <div class="section-label">Volume</div>
+      <div class="card" style="display:flex;align-items:center;gap:10px">
+        <span>🔇</span>
+        <input type="range" min="0" max="100" value="70" style="flex:1;accent-color:var(--accent)">
+        <span>🔊</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: SETTINGS ===== -->
+  <div class="screen" id="screen-settings">
+    <div class="sh">
+      <div class="sh-back" onclick="nav('home')">←</div>
+      <div class="sh-titles">
+        <div class="sh-title">Instellingen</div>
+        <div class="sh-sub">Autodarts & voorkeuren</div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="section-label">Autodarts verbinding</div>
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:0.5px solid var(--border);margin-bottom:12px">
+          <span style="font-size:14px;font-weight:500">Status</span>
+          <span class="badge badge-red" id="st-badge">Niet verbonden</span>
+        </div>
+        <div class="field">
+          <div class="field-label">Board ID</div>
+          <input class="field-input" id="st-board" type="text" placeholder="bijv. abc123-xxxx-xxxx" autocomplete="off" spellcheck="false" autocorrect="off">
+        </div>
+        <div class="field">
+          <div class="field-label">Bearer token</div>
+          <input class="field-input" id="st-token" type="password" placeholder="Jouw Autodarts token...">
+        </div>
+        <div style="background:var(--blue-dim);border:0.5px solid rgba(71,170,255,0.2);border-radius:var(--r-sm);padding:10px 13px;font-size:12px;color:var(--blue);margin-bottom:12px">
+          ℹ Ga naar <strong style="color:var(--text)">play.autodarts.io</strong> → Profiel → API
+        </div>
+        <div class="status-msg" id="st-status"></div>
+        <div class="ws-log" id="ws-log" style="display:none"></div>
+        <button class="btn btn-primary" onclick="connectWS()">Verbinden</button>
+        <button class="btn btn-danger" style="margin-top:8px" onclick="disconnectWS()">Verbinding verwijderen</button>
+      </div>
+
+      <div class="section-label">App</div>
+      <div class="card">
+        <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Checkout suggesties</div><div class="toggle-desc">Toont beste uitweg bij lage score</div></div><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Geluidseffecten</div><div class="toggle-desc">Geluiden bij bijzondere worpen</div></div><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Scherm actief houden</div><div class="toggle-desc">Voorkomt dimmen tijdens spel</div></div><div class="toggle-sw" id="wake-lock-sw" onclick="toggleWakeLock(this)"></div></div>
+      </div>
+
+      <div style="text-align:center;padding:24px 0 8px;font-size:12px;color:var(--muted)">DartMate · Gemaakt met Claude</div>
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM NAV ===== -->
+  <div id="nav">
+    <button class="nav-btn active" data-screen="home" onclick="nav('home')">
+      <span class="nav-icon">🎯</span><span class="nav-label">Home</span>
+    </button>
+    <button class="nav-btn" data-screen="game" onclick="nav('game')">
+      <span class="nav-icon">🎮</span><span class="nav-label">Spel</span>
+    </button>
+    <button class="nav-btn" data-screen="stats" onclick="nav('stats')">
+      <span class="nav-icon">📊</span><span class="nav-label">Stats</span>
+    </button>
+    <button class="nav-btn" data-screen="players" onclick="nav('players')">
+      <span class="nav-icon">👥</span><span class="nav-label">Spelers</span>
+    </button>
+    <button class="nav-btn" data-screen="music" onclick="nav('music')">
+      <span class="nav-icon">🎵</span><span class="nav-label">Sfeer</span>
+    </button>
+  </div>
+
+</div>
+
+<!-- ===== DART INPUT MODAL ===== -->
+<div id="modal-bg" onclick="handleModalBgClick(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+
+    <!-- 3 dart slots -->
+    <div class="dart-slots">
+      <div class="dart-slot active" id="slot-0"><span class="dart-slot-num">1</span>—</div>
+      <div class="dart-slot" id="slot-1"><span class="dart-slot-num">2</span>—</div>
+      <div class="dart-slot" id="slot-2"><span class="dart-slot-num">3</span>—</div>
+    </div>
+
+    <!-- S / D / T / Miss -->
+    <div class="mult-row">
+      <div class="mult-btn" id="mb-S" onclick="selMult('S')">Single</div>
+      <div class="mult-btn" id="mb-D" onclick="selMult('D')">Double</div>
+      <div class="mult-btn" id="mb-T" onclick="selMult('T')">Triple</div>
+      <div class="mult-btn miss-btn" id="mb-M" onclick="selMult('M')">Miss</div>
+    </div>
+
+    <!-- Number grid 1-20 + Bull -->
+    <div class="num-grid" id="num-grid">
+      <div class="num-btn" onclick="selNum(1)">1</div>
+      <div class="num-btn" onclick="selNum(2)">2</div>
+      <div class="num-btn" onclick="selNum(3)">3</div>
+      <div class="num-btn" onclick="selNum(4)">4</div>
+      <div class="num-btn" onclick="selNum(5)">5</div>
+      <div class="num-btn" onclick="selNum(6)">6</div>
+      <div class="num-btn" onclick="selNum(7)">7</div>
+      <div class="num-btn" onclick="selNum(8)">8</div>
+      <div class="num-btn" onclick="selNum(9)">9</div>
+      <div class="num-btn" onclick="selNum(10)">10</div>
+      <div class="num-btn" onclick="selNum(11)">11</div>
+      <div class="num-btn" onclick="selNum(12)">12</div>
+      <div class="num-btn" onclick="selNum(13)">13</div>
+      <div class="num-btn" onclick="selNum(14)">14</div>
+      <div class="num-btn" onclick="selNum(15)">15</div>
+      <div class="num-btn" onclick="selNum(16)">16</div>
+      <div class="num-btn" onclick="selNum(17)">17</div>
+      <div class="num-btn" onclick="selNum(18)">18</div>
+      <div class="num-btn" onclick="selNum(19)">19</div>
+      <div class="num-btn" onclick="selNum(20)">20</div>
+      <div class="num-btn bull-btn" id="bull-btn" onclick="selBull()">Bull</div>
+    </div>
+
+    <!-- Turn summary -->
+    <div class="turn-summary">
+      <div>
+        <div style="font-size:10px;color:var(--muted);letter-spacing:0.08em;margin-bottom:2px">BEURT SCORE</div>
+        <div class="ts-score" id="ts-score">0</div>
+      </div>
+      <div class="ts-remaining" id="ts-remaining">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:0.08em;margin-bottom:2px">NA DEZE BEURT</div>
+        <strong id="ts-left">—</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== EDIT TURN MODAL ===== -->
+<div id="edit-modal-bg" onclick="handleEditBgClick(event)">
+  <div class="edit-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="edit-title">Beurt aanpassen</div>
+    <div class="edit-sub" id="edit-sub">Tik een pijl om aan te passen</div>
+    <div class="edit-darts" id="edit-darts"></div>
+    <div class="edit-note">Na aanpassen wordt de score herberekend</div>
+    <div class="mult-row" id="edit-mult-row" style="display:none">
+      <div class="mult-btn" id="emb-S" onclick="editSelMult('S')">Single</div>
+      <div class="mult-btn" id="emb-D" onclick="editSelMult('D')">Double</div>
+      <div class="mult-btn" id="emb-T" onclick="editSelMult('T')">Triple</div>
+      <div class="mult-btn miss-btn" id="emb-M" onclick="editSelMult('M')">Miss</div>
+    </div>
+    <div class="num-grid" id="edit-num-grid" style="display:none">
+      <div class="num-btn" onclick="editSelNum(1)">1</div>
+      <div class="num-btn" onclick="editSelNum(2)">2</div>
+      <div class="num-btn" onclick="editSelNum(3)">3</div>
+      <div class="num-btn" onclick="editSelNum(4)">4</div>
+      <div class="num-btn" onclick="editSelNum(5)">5</div>
+      <div class="num-btn" onclick="editSelNum(6)">6</div>
+      <div class="num-btn" onclick="editSelNum(7)">7</div>
+      <div class="num-btn" onclick="editSelNum(8)">8</div>
+      <div class="num-btn" onclick="editSelNum(9)">9</div>
+      <div class="num-btn" onclick="editSelNum(10)">10</div>
+      <div class="num-btn" onclick="editSelNum(11)">11</div>
+      <div class="num-btn" onclick="editSelNum(12)">12</div>
+      <div class="num-btn" onclick="editSelNum(13)">13</div>
+      <div class="num-btn" onclick="editSelNum(14)">14</div>
+      <div class="num-btn" onclick="editSelNum(15)">15</div>
+      <div class="num-btn" onclick="editSelNum(16)">16</div>
+      <div class="num-btn" onclick="editSelNum(17)">17</div>
+      <div class="num-btn" onclick="editSelNum(18)">18</div>
+      <div class="num-btn" onclick="editSelNum(19)">19</div>
+      <div class="num-btn" onclick="editSelNum(20)">20</div>
+      <div class="num-btn bull-btn" onclick="editSelBull()">Bull</div>
+    </div>
+    <button class="btn btn-primary" id="edit-confirm-btn" style="margin-top:12px;display:none" onclick="confirmEditTurn()">Opslaan</button>
+    <button class="btn btn-secondary" style="margin-top:8px" onclick="closeEditModal()">Annuleren</button>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast"></div>
+
+<script>
+// ============ STATE ============
+const COLORS = [
+  {bg:'rgba(212,255,71,0.15)',text:'#d4ff47'},
+  {bg:'rgba(71,255,178,0.15)',text:'#47ffb2'},
+  {bg:'rgba(255,159,71,0.15)',text:'#ff9f47'},
+  {bg:'rgba(71,170,255,0.15)',text:'#47aaff'},
+  {bg:'rgba(255,82,82,0.15)',text:'#ff5252'},
+];
+
+// Full checkout table — best route per score (2-170)
+const CHECKOUTS = {
+  170:'T20 T20 Bull', 167:'T20 T19 Bull', 164:'T20 T18 Bull', 161:'T20 T17 Bull',
+  160:'T20 T20 D20', 158:'T20 T20 D19', 157:'T20 T19 D20', 156:'T20 T20 D18',
+  155:'T20 T19 D19', 154:'T20 T18 D20', 153:'T20 T19 D18', 152:'T20 T20 D16',
+  151:'T20 T17 D20', 150:'T20 T18 D18', 149:'T20 T19 D16', 148:'T20 T16 D20',
+  147:'T20 T17 D18', 146:'T20 T18 D16', 145:'T20 T15 D20', 144:'T20 T20 D12',
+  143:'T20 T17 D16', 142:'T20 T14 D20', 141:'T20 T15 D18', 140:'T20 T16 D16',
+  139:'T20 T13 D20', 138:'T20 T14 D18', 137:'T20 T15 D16', 136:'T20 T20 D8',
+  135:'T20 T15 D15', 134:'T20 T14 D16', 133:'T20 T19 D8',  132:'T20 T16 D12',
+  131:'T20 T13 D16', 130:'T20 T20 D5',  129:'T19 T16 D12', 128:'T18 T14 D16',
+  127:'T20 T17 D8',  126:'T19 T19 D6',  125:'T20 T15 D10', 124:'T20 T16 D8',
+  123:'T19 T16 D9',  122:'T18 T18 D7',  121:'T20 T11 D14', 120:'T20 S20 D20',
+  119:'T19 T12 D13', 118:'T20 S18 D20', 117:'T20 S17 D20', 116:'T20 S16 D20',
+  115:'T20 S15 D20', 114:'T20 S14 D20', 113:'T20 S13 D20', 112:'T20 S12 D20',
+  111:'T20 S11 D20', 110:'T20 S10 D20', 109:'T20 S9 D20',  108:'T20 S8 D20',
+  107:'T19 S10 D20', 106:'T20 S6 D20',  105:'T20 S5 D20',  104:'T20 S4 D20',
+  103:'T20 S3 D20',  102:'T20 S2 D20',  101:'T20 S1 D20',  100:'T20 D20',
+  99:'T19 S2 D20',   98:'T20 D19',      97:'T19 D20',      96:'T20 D18',
+  95:'T19 D19',      94:'T18 D20',      93:'T19 D18',      92:'T20 D16',
+  91:'T17 D20',      90:'T18 D18',      89:'T19 D16',      88:'T20 D14',
+  87:'T17 D18',      86:'T18 D16',      85:'T15 D20',      84:'T20 D12',
+  83:'T17 D16',      82:'T14 D20',      81:'T19 D12',      80:'T20 D10',
+  79:'T13 D20',      78:'T18 D12',      77:'T15 D16',      76:'T20 D8',
+  75:'T17 D12',      74:'T14 D16',      73:'T19 D8',       72:'T16 D12',
+  71:'T13 D16',      70:'T18 D8',       69:'T19 D6',       68:'T20 D4',
+  67:'T17 D8',       66:'T10 D18',      65:'T19 D4',       64:'T16 D8',
+  63:'T13 D12',      62:'T10 D16',      61:'T15 D8',       60:'S20 D20',
+  59:'S19 D20',      58:'S18 D20',      57:'S17 D20',      56:'S16 D20',
+  55:'S15 D20',      54:'S14 D20',      53:'S13 D20',      52:'D16',
+  51:'S11 D20',      50:'Bull',         49:'S9 D20',       48:'D24',
+  47:'S7 D20',       46:'S6 D20',       45:'S5 D20',       44:'S4 D20',
+  43:'S3 D20',       42:'S2 D20',       41:'S1 D20',       40:'D20',
+  38:'D19',          36:'D18',          34:'D17',          32:'D16',
+  30:'D15',          28:'D14',          26:'D13',          24:'D12',
+  22:'D11',          20:'D10',          18:'D9',           16:'D8',
+  14:'D7',           12:'D6',           10:'D5',           8:'D4',
+  6:'D3',            4:'D2',            2:'D1'
+};
+
+// Parse checkout into darts array for display
+function parseCheckout(str) {
+  return str.split(' ').map(d => {
+    if (d === 'Bull') return {label:'Bull', type:'bull'};
+    const m = d.match(/^([TDS])(\d+)$/);
+    if (!m) return {label:d, type:'single'};
+    const [,prefix,num] = m;
+    const types = {T:'triple',D:'double',S:'single'};
+    const labels = {T:'T','D':'D','S':''};
+    return {label: labels[prefix]+num, type: types[prefix], raw: d};
+  });
+}
+
+let state = {
+  screen: 'home',
+  game: '501',
+  startScore: 501,
+  leg: 1,
+  turn: 0,
+  players: [{name:'Markpaul', color:0}],
+  scores: {},
+  dartsThrown: {},
+  stats: {},
+  throws: [],
+  connected: false,
+  ws: null
+};
+
+function initScores() {
+  state.players.forEach(p => {
+    state.scores[p.name] = state.startScore;
+    state.dartsThrown[p.name] = 0;
+    if (!state.stats[p.name]) {
+      state.stats[p.name] = {total:0, turns:0, checkouts:0, high:0, busts:0};
+    }
+  });
+}
+initScores();
+
+// ============ NAVIGATION ============
+function nav(screenId) {
+  // Deactivate all screens
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  // Activate target
+  const target = document.getElementById('screen-' + screenId);
+  if (target) target.classList.add('active');
+  // Update nav buttons (only for main nav screens)
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.screen === screenId);
+  });
+  state.screen = screenId;
+  renderScreen(screenId);
+}
+
+function renderScreen(id) {
+  if (id === 'home') renderHome();
+  else if (id === 'game') renderGame();
+  else if (id === 'stats') renderStats();
+  else if (id === 'players') renderPlayers();
+  else if (id === 'settings') renderSettings();
+}
+
+// ============ RENDER: HOME ============
+function renderHome() {
+  // Connection bar
+  const bar = document.getElementById('home-conn-bar');
+  const txt = document.getElementById('home-conn-text');
+  if (state.connected) {
+    bar.className = 'conn-bar connected';
+    txt.textContent = 'Verbonden met Autodarts';
+  } else {
+    bar.className = 'conn-bar disconnected';
+    txt.textContent = 'Niet verbonden — ga naar Instellingen';
+  }
+  // Players overview
+  const el = document.getElementById('home-players');
+  el.innerHTML = state.players.map((p,i) => {
+    const s = state.stats[p.name] || {total:0,turns:0};
+    const avg = s.turns > 0 ? Math.round(s.total / s.turns * 3) : 0;
+    const c = COLORS[p.color % COLORS.length];
+    return `<div class="player-card ${state.turn === i ? 'active-turn' : ''}">
+      <div class="pc-avatar" style="background:${c.bg};color:${c.text}">${initials(p.name)}</div>
+      <div class="pc-info">
+        <div class="pc-name">${p.name} ${state.turn===i?'<span class="badge badge-accent" style="font-size:10px">gooit</span>':''}</div>
+        <div class="pc-sub">Gem: ${avg}</div>
+      </div>
+      <div class="pc-score">${state.scores[p.name] ?? state.startScore}</div>
+    </div>`;
+  }).join('');
+  // Throws
+  const tf = document.getElementById('home-throws');
+  if (state.throws.length === 0) {
+    tf.innerHTML = '<div style="text-align:center;padding:18px 0;color:var(--muted);font-size:13px;">Nog geen worpen</div>';
+  } else {
+    tf.innerHTML = [...state.throws].reverse().slice(0,6).map(t => {
+      const isBig = t.score === 180;
+      const isHigh = t.score >= 140;
+      const bg = isBig ? 'var(--accent-dim)' : isHigh ? 'rgba(255,159,71,0.12)' : 'var(--s2)';
+      const col = isBig ? 'var(--accent)' : isHigh ? 'var(--orange)' : 'var(--muted2)';
+      return `<div class="throw-row">
+        <div class="throw-badge" style="background:${bg};color:${col}">${t.score}</div>
+        <div class="throw-info"><div class="throw-player">${t.player}</div><div class="throw-detail">${t.darts ? t.darts + ' · ' : ''}${t.remaining} over</div></div>
+        <div class="throw-time">${t.time}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+// ============ RENDER: GAME ============
+function renderGame() {
+  const p = state.players[state.turn];
+  if (!p) return;
+  document.getElementById('game-title').textContent = state.game;
+  document.getElementById('game-sub').textContent = `Beurt ${Math.floor((state.dartsThrown[p.name]||0)/3)+1} · ${p.name} gooit`;
+  document.getElementById('game-leg-badge').textContent = `Leg ${state.leg}`;
+
+  document.getElementById('game-players').innerHTML = state.players.map((pl,i) => {
+    const c = COLORS[pl.color % COLORS.length];
+    const d = (state.dartsThrown[pl.name] || 0) % 3;
+    const darts = [0,1,2].map(j => `<div class="pc-dart ${j < d ? 'hit':''}"></div>`).join('');
+    return `<div class="player-card ${state.turn===i?'active-turn':''}">
+      <div class="pc-avatar" style="background:${c.bg};color:${c.text}">${initials(pl.name)}</div>
+      <div class="pc-info">
+        <div class="pc-name">${pl.name}</div>
+        <div class="pc-sub">Gem: ${avg(pl.name)}</div>
+        <div class="pc-darts">${darts}</div>
+      </div>
+      <div class="pc-score">${state.scores[pl.name] ?? state.startScore}</div>
+    </div>`;
+  }).join('');
+
+  const score = state.scores[p.name] ?? state.startScore;
+  const co = score <= 170 ? CHECKOUTS[score] : null;
+  const hint = document.getElementById('checkout-hint');
+  if (co) {
+    hint.classList.add('show');
+    const darts = parseCheckout(co);
+    const count = darts.length;
+    document.getElementById('checkout-darts-count').textContent = count + ' pijl' + (count !== 1 ? 'en' : '');
+    document.getElementById('checkout-darts').innerHTML = darts.map((d,i) =>
+      (i > 0 ? '<span class="co-arrow">→</span>' : '') +
+      `<span class="co-dart ${d.type}">${d.label}</span>`
+    ).join('');
+  } else {
+    hint.classList.remove('show');
+  }
+
+  const s = state.stats[p.name] || {};
+  document.getElementById('game-stats').innerHTML = `
+    <div class="stat-box"><div class="stat-val">${avg(p.name)}</div><div class="stat-lbl">Gem. per beurt</div></div>
+    <div class="stat-box"><div class="stat-val">${s.high||0}</div><div class="stat-lbl">Hoogste worp</div></div>
+    <div class="stat-box"><div class="stat-val">${s.checkouts||0}</div><div class="stat-lbl">Checkouts</div></div>
+    <div class="stat-box"><div class="stat-val">${s.busts||0}</div><div class="stat-lbl">Busts</div></div>`;
+}
+
+// ============ RENDER: STATS ============
+function renderStats() {
+  const el = document.getElementById('stats-content');
+  if (state.players.length === 0) { el.innerHTML = '<div style="padding:40px 0;text-align:center;color:var(--muted)">Geen spelers</div>'; return; }
+  el.innerHTML = state.players.map(p => {
+    const c = COLORS[p.color % COLORS.length];
+    const s = state.stats[p.name] || {total:0,turns:0,checkouts:0,high:0,busts:0};
+    const a = avg(p.name);
+    return `<div class="section-label">${p.name}</div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-val" style="color:${c.text}">${a}</div><div class="stat-lbl">Gem. 3 pijlen</div></div>
+      <div class="stat-box"><div class="stat-val" style="color:${c.text}">${s.high}</div><div class="stat-lbl">Hoogste beurt</div></div>
+      <div class="stat-box"><div class="stat-val" style="color:${c.text}">${s.checkouts}</div><div class="stat-lbl">Checkouts</div></div>
+      <div class="stat-box"><div class="stat-val" style="color:${c.text}">${state.scores[p.name]??state.startScore}</div><div class="stat-lbl">Score over</div></div>
+    </div>`;
+  }).join('');
+}
+
+// ============ RENDER: PLAYERS ============
+function renderPlayers() {
+  document.getElementById('players-list').innerHTML = state.players.map((p,i) => {
+    const c = COLORS[p.color % COLORS.length];
+    return `<div class="player-card">
+      <div class="pc-avatar" style="background:${c.bg};color:${c.text}">${initials(p.name)}</div>
+      <div class="pc-info"><div class="pc-name">${p.name}</div><div class="pc-sub">${i===0?'Host':'Vriend'}</div></div>
+      ${i>0?`<button onclick="removePlayer(${i})" style="background:none;border:none;color:var(--red);font-size:22px;cursor:pointer;padding:8px;line-height:1">×</button>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ============ RENDER: SETTINGS ============
+function renderSettings() {
+  const saved = getSaved();
+  if (saved.board) document.getElementById('st-board').value = saved.board;
+  if (saved.token) document.getElementById('st-token').value = saved.token;
+  updateSettingsBadge();
+}
+
+function updateSettingsBadge() {
+  const badge = document.getElementById('st-badge');
+  if (state.connected) {
+    badge.className = 'badge badge-green'; badge.textContent = 'Verbonden';
+  } else {
+    badge.className = 'badge badge-red'; badge.textContent = 'Niet verbonden';
+  }
+  const bar = document.getElementById('home-conn-bar');
+  const txt = document.getElementById('home-conn-text');
+  if (bar) {
+    bar.className = state.connected ? 'conn-bar connected' : 'conn-bar disconnected';
+    txt.textContent = state.connected ? 'Verbonden met Autodarts' : 'Niet verbonden — ga naar Instellingen';
+  }
+}
+
+// ============ GAME LOGIC ============
+function selectGame(el) {
+  document.querySelectorAll('#game-chips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  state.game = el.dataset.game;
+  state.startScore = state.game === '301' ? 301 : 501;
+  initScores();
+}
+
+function startGame() {
+  initScores();
+  state.leg = 1;
+  state.turn = 0;
+  state.throws = [];
+  nav('game');
+}
+
+// ============ DART INPUT ============
+// Each dart: {mult: 'S'|'D'|'T'|'M', num: 1-20|25, score: n, label: string}
+let dartTurn = [];   // darts thrown this turn (max 3)
+let curMult = null;  // currently selected multiplier
+
+const MULT_VALS = {S:1, D:2, T:3, M:0};
+const MULT_MAX  = {S:20, D:20, T:20, M:0}; // Bull handled separately
+
+function openKeypad() {
+  dartTurn = [];
+  curMult = null;
+  updateDartModal();
+  document.getElementById('modal-bg').classList.add('show');
+}
+
+function handleModalBgClick(e) {
+  if (e.target === document.getElementById('modal-bg')) {
+    document.getElementById('modal-bg').classList.remove('show');
+  }
+}
+
+function selMult(m) {
+  // Miss = instant dart, no number needed
+  if (m === 'M') {
+    addDart({mult:'M', num:0, score:0, label:'Miss'});
+    return;
+  }
+  curMult = m;
+  // highlight selected mult btn
+  ['S','D','T','M'].forEach(x => {
+    const el = document.getElementById('mb-'+x);
+    el.className = 'mult-btn' + (x === 'miss-btn' || x === 'M' ? ' miss-btn' : '') + (x === m ? ' sel-'+x : '');
+  });
+  document.getElementById('mb-M').className = 'mult-btn miss-btn';
+  updateNumGrid();
+}
+
+function selNum(n) {
+  if (!curMult) { toast('Kies eerst S, D of T'); return; }
+  const score = MULT_VALS[curMult] * n;
+  const labels = {S:'', D:'D', T:'T'};
+  addDart({mult:curMult, num:n, score, label: labels[curMult]+n});
+}
+
+function selBull() {
+  if (!curMult) { toast('Kies eerst S of D'); return; }
+  if (curMult === 'T') { toast('Triple Bull bestaat niet'); return; }
+  const score = curMult === 'D' ? 50 : 25;
+  const label = curMult === 'D' ? 'Bull' : 'S25';
+  addDart({mult:curMult, num:25, score, label});
+}
+
+function addDart(dart) {
+  if (dartTurn.length >= 3) return;
+
+  // Validate: can't score more than what's left (avoid impossible scores mid-turn)
+  const p = state.players[state.turn];
+  const cur = state.scores[p.name] ?? state.startScore;
+  const thrown = dartTurn.reduce((a,d) => a+d.score, 0);
+  const remaining = cur - thrown;
+
+  // Bust check per dart
+  const afterThis = remaining - dart.score;
+  if (afterThis < 0 || afterThis === 1) {
+    // Still allow — will be bust at end of turn
+  }
+
+  dartTurn.push(dart);
+  curMult = null;
+  ['S','D','T','M'].forEach(x => {
+    document.getElementById('mb-'+x).className = 'mult-btn' + (x === 'M' ? ' miss-btn' : '');
+  });
+
+  updateDartModal();
+
+  // Auto-confirm after 3rd dart OR after checkout dart
+  if (dartTurn.length === 3 || afterThis === 0) {
+    setTimeout(() => confirmTurn(), 280);
+  }
+}
+
+function updateDartModal() {
+  const p = state.players[state.turn];
+  const cur = p ? (state.scores[p.name] ?? state.startScore) : 0;
+  const thrown = dartTurn.reduce((a,d) => a+d.score, 0);
+  const left = cur - thrown;
+
+  // Update slots
+  for (let i = 0; i < 3; i++) {
+    const slot = document.getElementById('slot-'+i);
+    const dart = dartTurn[i];
+    const numEl = slot.querySelector('.dart-slot-num');
+    if (dart) {
+      slot.className = 'dart-slot done' +
+        (dart.mult === 'D' ? ' is-double' :
+         dart.mult === 'T' ? ' is-triple' :
+         dart.mult === 'M' ? ' is-miss' : '');
+      slot.textContent = '';
+      slot.appendChild(numEl);
+      slot.appendChild(document.createTextNode(dart.label));
+    } else if (i === dartTurn.length) {
+      slot.className = 'dart-slot active';
+      slot.textContent = '';
+      slot.appendChild(numEl);
+      slot.appendChild(document.createTextNode('—'));
+    } else {
+      slot.className = 'dart-slot';
+      slot.textContent = '';
+      slot.appendChild(numEl);
+      slot.appendChild(document.createTextNode('—'));
+    }
+  }
+
+  // Summary
+  document.getElementById('ts-score').textContent = thrown;
+  const leftEl = document.getElementById('ts-left');
+  if (left < 0 || left === 1) {
+    leftEl.textContent = 'BUST';
+    leftEl.style.color = 'var(--red)';
+  } else {
+    leftEl.textContent = left >= 0 ? left : '—';
+    leftEl.style.color = 'var(--text)';
+  }
+
+  updateNumGrid();
+}
+
+function updateNumGrid() {
+  if (!curMult) return;
+  const p = state.players[state.turn];
+  const cur = p ? (state.scores[p.name] ?? state.startScore) : 501;
+  const thrown = dartTurn.reduce((a,d) => a+d.score, 0);
+  const left = cur - thrown;
+
+  // Disable numbers that would make score impossible
+  // Triple max = 60, Double max = 40 (or Bull=50)
+  document.querySelectorAll('.num-btn:not(.bull-btn)').forEach(btn => {
+    const n = parseInt(btn.textContent);
+    const s = MULT_VALS[curMult] * n;
+    // Disable if: score > remaining (instant bust impossible checkout)
+    // Allow if remaining after = 0 (checkout) or >= 2
+    const after = left - s;
+    const impossible = after < 0 || after === 1 || (curMult === 'T' && n > 20) || (curMult === 'D' && n > 20);
+    btn.className = 'num-btn' + (impossible ? ' disabled' : '');
+    btn.onclick = impossible ? null : () => selNum(n);
+  });
+
+  // Bull button
+  const bullScore = curMult === 'D' ? 50 : curMult === 'T' ? 0 : 25;
+  const bullAfter = left - bullScore;
+  const bullOk = curMult !== 'T' && bullAfter >= 0 && bullAfter !== 1;
+  const bullBtn = document.getElementById('bull-btn');
+  bullBtn.className = 'num-btn bull-btn' + (!bullOk ? ' disabled' : '');
+}
+
+function confirmTurn() {
+  const p = state.players[state.turn];
+  if (!p || dartTurn.length === 0) return;
+
+  const scored = dartTurn.reduce((a,d) => a+d.score, 0);
+  const cur = state.scores[p.name] ?? state.startScore;
+  const next = cur - scored;
+  const s = state.stats[p.name];
+  const lastDart = dartTurn[dartTurn.length-1];
+
+  document.getElementById('modal-bg').classList.remove('show');
+
+  if (next < 0 || next === 1) {
+    // Bust — must end on double (or bull=D25)
+    s.busts++;
+    state.throws.push({player:p.name, score:0, remaining:cur, time:now(), darts: dartTurn.map(d=>d.label).join(' '), dartObjs:[...dartTurn], wasBust:true});
+    toast(`Bust! ${p.name} blijft op ${cur}`);
+  } else if (next === 0) {
+    // Checkout — last dart must be double or bull
+    if (lastDart.mult !== 'D') {
+      s.busts++;
+      toast(`Geen dubbel uitgegooid — Bust!`);
+    } else {
+      s.total += scored; s.turns++; s.checkouts++;
+      state.scores[p.name] = 0;
+      state.dartsThrown[p.name] = (state.dartsThrown[p.name]||0) + dartTurn.length;
+      state.throws.push({player:p.name, score:scored, remaining:0, time:now(),
+        darts: dartTurn.map(d=>d.label).join(' '), dartObjs:[...dartTurn], wasCheckout:true});
+      toast(`CHECKOUT! ${p.name} wint de leg! 🏆`, true);
+      setTimeout(() => { state.leg++; initScores(); state.turn = 0; renderGame(); }, 2000);
+      return;
+    }
+  } else {
+    s.total += scored; s.turns++;
+    if (scored > s.high) s.high = scored;
+    state.scores[p.name] = next;
+    state.dartsThrown[p.name] = (state.dartsThrown[p.name]||0) + dartTurn.length;
+    state.throws.push({player:p.name, score:scored, remaining:next, time:now(),
+      darts: dartTurn.map(d=>d.label).join(' ')});
+    if (scored === 180) toast('ONE HUNDRED AND EIGHTY! 🎯', true);
+    state.turn = (state.turn + 1) % state.players.length;
+  }
+  updateUndoButtons();
+  renderGame();
+}
+
+function addPlayer() {
+  const inp = document.getElementById('new-player-input');
+  const name = inp.value.trim();
+  if (!name) return;
+  const color = state.players.length % COLORS.length;
+  state.players.push({name, color});
+  state.scores[name] = state.startScore;
+  state.dartsThrown[name] = 0;
+  state.stats[name] = {total:0,turns:0,checkouts:0,high:0,busts:0};
+  inp.value = '';
+  renderPlayers();
+}
+
+function removePlayer(i) {
+  const name = state.players[i].name;
+  state.players.splice(i,1);
+  delete state.scores[name]; delete state.dartsThrown[name]; delete state.stats[name];
+  if (state.turn >= state.players.length) state.turn = 0;
+  renderPlayers();
+}
+
+
+// ============ UNDO ============
+function undoTurn() {
+  if (state.throws.length === 0) { toast('Niets om ongedaan te maken'); return; }
+
+  const last = state.throws[state.throws.length - 1];
+  // Restore score
+  state.scores[last.player] = (state.scores[last.player] ?? 0) + last.score;
+  // Restore stats
+  const s = state.stats[last.player];
+  if (s) {
+    s.total = Math.max(0, s.total - last.score);
+    s.turns = Math.max(0, s.turns - 1);
+    if (last.wasCheckout) s.checkouts = Math.max(0, s.checkouts - 1);
+    if (last.wasBust) s.busts = Math.max(0, s.busts - 1);
+  }
+  // Restore turn pointer
+  const idx = state.players.findIndex(p => p.name === last.player);
+  if (idx !== -1) state.turn = idx;
+
+  state.throws.pop();
+  updateUndoButtons();
+  renderGame();
+  toast('Beurt ongedaan gemaakt');
+}
+
+function updateUndoButtons() {
+  const hasHistory = state.throws.length > 0;
+  const undoBtn = document.getElementById('undo-btn');
+  const editBtn = document.getElementById('edit-btn');
+  if (undoBtn) undoBtn.className = 'undo-btn' + (hasHistory ? ' enabled' : '');
+  if (editBtn) editBtn.className = 'undo-btn' + (hasHistory ? ' enabled' : '');
+}
+
+// ============ EDIT TURN ============
+let editState = { dartIdx: null, mult: null, darts: [] };
+
+function openEditTurn() {
+  if (state.throws.length === 0) { toast('Geen beurt om aan te passen'); return; }
+  const last = state.throws[state.throws.length - 1];
+  // Parse stored dart labels back into dart objects
+  editState.darts = last.dartObjs ? [...last.dartObjs] : parseDartLabels(last.darts || '');
+  editState.dartIdx = null;
+  editState.mult = null;
+  renderEditDarts();
+  document.getElementById('edit-sub').textContent = `Beurt van ${last.player} — tik een pijl`;
+  document.getElementById('edit-mult-row').style.display = 'none';
+  document.getElementById('edit-num-grid').style.display = 'none';
+  document.getElementById('edit-confirm-btn').style.display = 'none';
+  document.getElementById('edit-modal-bg').classList.add('show');
+}
+
+function parseDartLabels(str) {
+  if (!str) return [{mult:'S',num:0,score:0,label:'?'},{mult:'S',num:0,score:0,label:'?'},{mult:'S',num:0,score:0,label:'?'}];
+  return str.split(' ').map(l => {
+    if (l === 'Miss') return {mult:'M',num:0,score:0,label:'Miss'};
+    if (l === 'Bull') return {mult:'D',num:25,score:50,label:'Bull'};
+    if (l === 'S25')  return {mult:'S',num:25,score:25,label:'S25'};
+    const m = l.match(/^([TDS]?)(\d+)$/);
+    if (!m) return {mult:'S',num:0,score:0,label:l};
+    const prefix = m[1] || 'S';
+    const num = parseInt(m[2]);
+    const mult = prefix === 'T' ? 'T' : prefix === 'D' ? 'D' : 'S';
+    const score = {T:3,D:2,S:1}[mult] * num;
+    return {mult, num, score, label: l};
+  });
+}
+
+function renderEditDarts() {
+  const el = document.getElementById('edit-darts');
+  el.innerHTML = editState.darts.map((d,i) => {
+    const cls = d.mult==='D'?' is-double':d.mult==='T'?' is-triple':d.mult==='M'?' is-miss':'';
+    const sel = editState.dartIdx === i ? ' selected' : '';
+    return `<div class="edit-dart${sel}" onclick="selectEditDart(${i})">
+      <div class="edit-dart-num">Pijl ${i+1}</div>
+      <div class="edit-dart-val${cls}">${d.label}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectEditDart(i) {
+  editState.dartIdx = i;
+  editState.mult = null;
+  renderEditDarts();
+  document.getElementById('edit-mult-row').style.display = 'flex';
+  document.getElementById('edit-num-grid').style.display = 'none';
+  document.getElementById('edit-confirm-btn').style.display = 'none';
+  ['S','D','T','M'].forEach(x => {
+    document.getElementById('emb-'+x).className = 'mult-btn' + (x==='M'?' miss-btn':'');
+  });
+}
+
+function editSelMult(m) {
+  editState.mult = m;
+  if (m === 'M') {
+    editState.darts[editState.dartIdx] = {mult:'M',num:0,score:0,label:'Miss'};
+    finishEditDart();
+    return;
+  }
+  ['S','D','T','M'].forEach(x => {
+    document.getElementById('emb-'+x).className = 'mult-btn'+(x==='M'?' miss-btn':'')+(x===m?' sel-'+x:'');
+  });
+  document.getElementById('edit-num-grid').style.display = 'grid';
+}
+
+function editSelNum(n) {
+  const m = editState.mult;
+  const score = {T:3,D:2,S:1}[m] * n;
+  const labels = {S:'',D:'D',T:'T'};
+  editState.darts[editState.dartIdx] = {mult:m, num:n, score, label:labels[m]+n};
+  finishEditDart();
+}
+
+function editSelBull() {
+  const m = editState.mult;
+  if (m === 'T') { toast('Triple Bull bestaat niet'); return; }
+  const score = m === 'D' ? 50 : 25;
+  const label = m === 'D' ? 'Bull' : 'S25';
+  editState.darts[editState.dartIdx] = {mult:m, num:25, score, label};
+  finishEditDart();
+}
+
+function finishEditDart() {
+  editState.dartIdx = null;
+  editState.mult = null;
+  renderEditDarts();
+  document.getElementById('edit-mult-row').style.display = 'none';
+  document.getElementById('edit-num-grid').style.display = 'none';
+  document.getElementById('edit-confirm-btn').style.display = 'block';
+}
+
+function confirmEditTurn() {
+  const last = state.throws[state.throws.length - 1];
+  const player = last.player;
+  const oldScore = last.score;
+  const newScore = editState.darts.reduce((a,d) => a+d.score, 0);
+  const s = state.stats[player];
+
+  // Recalculate score
+  state.scores[player] = (state.scores[player] ?? 0) + oldScore - newScore;
+  if (s) {
+    s.total = Math.max(0, s.total - oldScore + newScore);
+    if (newScore > (s.high||0)) s.high = newScore;
+  }
+
+  // Update throw record
+  last.score = newScore;
+  last.remaining = state.scores[player];
+  last.darts = editState.darts.map(d=>d.label).join(' ');
+  last.dartObjs = [...editState.darts];
+  last.manualOverride = true;
+
+  closeEditModal();
+  updateUndoButtons();
+  renderGame();
+  toast('Beurt aangepast ✓');
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal-bg').classList.remove('show');
+}
+function handleEditBgClick(e) {
+  if (e.target === document.getElementById('edit-modal-bg')) closeEditModal();
+}
+
+// ============ AUTODARTS WEBSOCKET ============
+function connectWS() {
+  const board = document.getElementById('st-board').value.trim();
+  const token = document.getElementById('st-token').value.trim();
+  if (!board || !token) { setStatus('st-status','error','Vul beide velden in'); return; }
+
+  localStorage.setItem('dm_board', board);
+  localStorage.setItem('dm_token', token);
+
+  if (state.ws) { state.ws.close(); state.ws = null; }
+  setStatus('st-status','loading','Verbinding maken...');
+
+  // Autodarts uses a WebSocket connection
+  // URL format: wss://api.autodarts.io/ms/v0/subscribe/board/{boardId}
+  const wsUrl = `wss://api.autodarts.io/ms/v0/subscribe/board/${board}`;
+  wsLog(`Verbinden met: ${wsUrl}`);
+
+  try {
+    const ws = new WebSocket(wsUrl, [], {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    // Note: Browser WebSocket doesn't support custom headers directly
+    // Autodarts uses token in URL query param as fallback
+    const ws2 = new WebSocket(`${wsUrl}?token=${encodeURIComponent(token)}`);
+
+    ws2.onopen = () => {
+      state.connected = true;
+      state.ws = ws2;
+      setStatus('st-status','success','Verbonden met Autodarts!');
+      wsLog('WebSocket verbonden ✓');
+      updateSettingsBadge();
+    };
+    ws2.onmessage = (e) => {
+      try {
+        const data = JSON.parse(e.data);
+        wsLog('Data: ' + JSON.stringify(data).slice(0,80));
+        handleAutodarts(data);
+      } catch(err) { wsLog('Parse fout: ' + e.data.slice(0,60)); }
+    };
+    ws2.onerror = () => {
+      state.connected = false;
+      setStatus('st-status','error','Verbinding mislukt — controleer je Board ID en token');
+      wsLog('WebSocket fout ✗');
+      updateSettingsBadge();
+    };
+    ws2.onclose = () => {
+      if (state.ws === ws2) {
+        state.connected = false;
+        wsLog('Verbinding gesloten');
+        updateSettingsBadge();
+      }
+    };
+  } catch(err) {
+    setStatus('st-status','error','Fout: ' + err.message);
+    wsLog('Fout: ' + err.message);
+  }
+}
+
+function handleAutodarts(data) {
+  // Handle Autodarts throw events
+  // Event types: 'throw', 'match', 'game'
+  if (data.event === 'throw' || data.throws) {
+    const throws = data.throws || [data];
+    throws.forEach(t => {
+      const score = t.points || t.score || 0;
+      const player = state.players[state.turn]?.name || 'Speler';
+      const cur = state.scores[player] ?? state.startScore;
+      state.throws.push({player, score, remaining: Math.max(0, cur - score), time: now()});
+      if (state.throws.length > 30) state.throws.shift();
+      if (state.screen === 'home') renderHome();
+      if (state.screen === 'game') renderGame();
+    });
+  }
+}
+
+function disconnectWS() {
+  if (state.ws) { state.ws.close(); state.ws = null; }
+  state.connected = false;
+  localStorage.removeItem('dm_board');
+  localStorage.removeItem('dm_token');
+  document.getElementById('st-board').value = '';
+  document.getElementById('st-token').value = '';
+  setStatus('st-status','','');
+  document.getElementById('ws-log').style.display = 'none';
+  updateSettingsBadge();
+  toast('Verbinding verwijderd');
+}
+
+function wsLog(msg) {
+  const el = document.getElementById('ws-log');
+  el.style.display = 'block';
+  el.textContent += msg + '\n';
+  el.scrollTop = el.scrollHeight;
+}
+
+function setStatus(id, type, msg) {
+  const el = document.getElementById(id);
+  if (!type) { el.className = 'status-msg'; return; }
+  el.className = 'status-msg show ' + type;
+  el.innerHTML = (type==='loading'?'<div class="spinner"></div>':'') + `<span>${msg}</span>`;
+}
+
+// ============ WAKE LOCK ============
+let wakeLock = null;
+async function toggleWakeLock(sw) {
+  sw.classList.toggle('on');
+  if (sw.classList.contains('on')) {
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      toast('Scherm blijft actief');
+    } catch(e) { sw.classList.remove('on'); toast('Wake lock niet beschikbaar'); }
+  } else {
+    if (wakeLock) { wakeLock.release(); wakeLock = null; }
+  }
+}
+
+// ============ MUSIC ============
+let activeMusic = null;
+function playMusic(el, icon, label) {
+  document.querySelectorAll('.music-card').forEach(c => c.classList.remove('playing'));
+  if (activeMusic === label) { activeMusic = null; return; }
+  el.classList.add('playing');
+  activeMusic = label;
+  toast(`${icon} ${label} speelt`);
+}
+
+// ============ TOAST ============
+let toastTimer;
+function toast(msg, special = false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.opacity = '1';
+  el.className = special ? 'special' : '';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    el.style.opacity = '0';
+    setTimeout(() => { el.style.display = 'none'; }, 320);
+  }, 2600);
+}
+
+// ============ HELPERS ============
+function initials(name) {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+}
+function avg(name) {
+  const s = state.stats[name];
+  if (!s || s.turns === 0) return 0;
+  return Math.round(s.total / s.turns * 3);
+}
+function now() {
+  const d = new Date();
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+}
+function getSaved() {
+  return { board: localStorage.getItem('dm_board'), token: localStorage.getItem('dm_token') };
+}
+
+// ============ INIT ============
+function init() {
+  const saved = getSaved();
+  if (saved.board && saved.token) {
+    document.getElementById('st-board').value = saved.board;
+    document.getElementById('st-token').value = saved.token;
+  }
+  renderHome();
+}
+
+init();
+</script>
+</body>
+</html>
