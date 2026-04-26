@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
@@ -43,548 +44,621 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 
 /* ============ APP SHELL ============ */
 #app {
-  position: fixed;
-  inset: 0;
-  max-width: 430px;
-  margin: 0 auto;
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+position: fixed;
+inset: 0;
+max-width: 430px;
+margin: 0 auto;
+background: var(–bg);
+display: flex;
+flex-direction: column;
+overflow: hidden;
 }
 
 /* ============ SCREENS ============ */
 .screen {
-  position: absolute;
-  inset: 0;
-  bottom: var(--nav-h);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(30px);
-  transition: opacity 0.22s ease, transform 0.22s ease;
-  will-change: opacity, transform;
+position: absolute;
+inset: 0;
+bottom: var(–nav-h);
+display: flex;
+flex-direction: column;
+overflow: hidden;
+opacity: 0;
+pointer-events: none;
+transform: translateX(30px);
+transition: opacity 0.22s ease, transform 0.22s ease;
+will-change: opacity, transform;
 }
 .screen.active {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(0);
+opacity: 1;
+pointer-events: auto;
+transform: translateX(0);
 }
 
 /* ============ SCROLL AREA ============ */
 .scroll {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  padding: 0 16px 24px;
+flex: 1;
+overflow-y: auto;
+overflow-x: hidden;
+-webkit-overflow-scrolling: touch;
+padding: 0 16px 24px;
 }
 .scroll::-webkit-scrollbar { display: none; }
 
 /* ============ SCREEN HEADER ============ */
 .sh {
-  padding: calc(var(--safe-top) + 12px) 16px 14px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
+padding: calc(var(–safe-top) + 12px) 16px 14px;
+flex-shrink: 0;
+display: flex;
+align-items: flex-end;
+gap: 12px;
 }
 .sh-back {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  background: var(--s2);
-  border: 0.5px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 16px; color: var(--text);
-  flex-shrink: 0;
+width: 34px; height: 34px;
+border-radius: 50%;
+background: var(–s2);
+border: 0.5px solid var(–border);
+display: flex; align-items: center; justify-content: center;
+cursor: pointer; font-size: 16px; color: var(–text);
+flex-shrink: 0;
 }
 .sh-titles { flex: 1; }
-.sh-title { font-family: var(--font-display); font-size: 30px; letter-spacing: 0.03em; line-height: 1; }
-.sh-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.sh-title { font-family: var(–font-display); font-size: 30px; letter-spacing: 0.03em; line-height: 1; }
+.sh-sub { font-size: 12px; color: var(–muted); margin-top: 3px; }
 .sh-action { margin-left: auto; flex-shrink: 0; }
 
 /* ============ BOTTOM NAV ============ */
 #nav {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: var(--nav-h);
-  background: var(--s1);
-  border-top: 0.5px solid var(--border);
-  display: flex;
-  align-items: flex-start;
-  padding-top: 10px;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-  z-index: 100;
+position: absolute;
+bottom: 0; left: 0; right: 0;
+height: var(–nav-h);
+background: var(–s1);
+border-top: 0.5px solid var(–border);
+display: flex;
+align-items: flex-start;
+padding-top: 10px;
+padding-bottom: env(safe-area-inset-bottom, 0);
+z-index: 100;
 }
 .nav-btn {
-  flex: 1;
-  display: flex; flex-direction: column;
-  align-items: center; gap: 4px;
-  cursor: pointer;
-  padding: 4px 0;
-  background: none; border: none;
+flex: 1;
+display: flex; flex-direction: column;
+align-items: center; gap: 4px;
+cursor: pointer;
+padding: 4px 0;
+background: none; border: none;
 }
 .nav-icon { font-size: 22px; transition: transform 0.15s; }
-.nav-label { font-size: 10px; color: var(--muted); letter-spacing: 0.04em; transition: color 0.15s; }
-.nav-btn.active .nav-label { color: var(--accent); }
+.nav-label { font-size: 10px; color: var(–muted); letter-spacing: 0.04em; transition: color 0.15s; }
+.nav-btn.active .nav-label { color: var(–accent); }
 .nav-btn.active .nav-icon { transform: scale(1.1); }
 
 /* ============ CARDS ============ */
 .card {
-  background: var(--s1);
-  border: 0.5px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 14px 16px;
-  margin-bottom: 10px;
+background: var(–s1);
+border: 0.5px solid var(–border);
+border-radius: var(–r-lg);
+padding: 14px 16px;
+margin-bottom: 10px;
 }
 .card-inset {
-  background: var(--s2);
-  border: 0.5px solid var(--border);
-  border-radius: var(--r-md);
-  padding: 12px 14px;
-  margin-bottom: 8px;
+background: var(–s2);
+border: 0.5px solid var(–border);
+border-radius: var(–r-md);
+padding: 12px 14px;
+margin-bottom: 8px;
 }
 
 /* ============ SECTION LABEL ============ */
 .section-label {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin: 20px 0 8px;
+font-size: 10px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(–muted);
+margin: 20px 0 8px;
 }
 .section-label:first-child { margin-top: 4px; }
 
 /* ============ PLAYER CARD ============ */
 .player-card {
-  background: var(--s1);
-  border: 0.5px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 14px 16px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: border-color 0.2s;
+background: var(–s1);
+border: 0.5px solid var(–border);
+border-radius: var(–r-lg);
+padding: 14px 16px;
+margin-bottom: 8px;
+display: flex;
+align-items: center;
+gap: 12px;
+transition: border-color 0.2s;
 }
-.player-card.active-turn { border-color: var(--accent); }
-.player-card.active-turn .pc-score { color: var(--accent); }
+.player-card.active-turn { border-color: var(–accent); }
+.player-card.active-turn .pc-score { color: var(–accent); }
 .pc-avatar {
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display);
-  font-size: 17px;
-  flex-shrink: 0;
+width: 42px; height: 42px;
+border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+font-family: var(–font-display);
+font-size: 17px;
+flex-shrink: 0;
 }
 .pc-info { flex: 1; min-width: 0; }
 .pc-name { font-size: 15px; font-weight: 500; }
-.pc-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.pc-sub { font-size: 11px; color: var(–muted); margin-top: 2px; }
 .pc-darts { display: flex; gap: 3px; margin-top: 5px; }
-.pc-dart { width: 6px; height: 6px; border-radius: 50%; background: var(--s3); border: 0.5px solid var(--border2); transition: background 0.15s; }
-.pc-dart.hit { background: var(--accent); border-color: var(--accent); }
-.pc-score { font-family: var(--font-display); font-size: 38px; line-height: 1; color: var(--muted2); transition: color 0.2s; }
+.pc-dart { width: 6px; height: 6px; border-radius: 50%; background: var(–s3); border: 0.5px solid var(–border2); transition: background 0.15s; }
+.pc-dart.hit { background: var(–accent); border-color: var(–accent); }
+.pc-score { font-family: var(–font-display); font-size: 38px; line-height: 1; color: var(–muted2); transition: color 0.2s; }
 
 /* ============ STAT GRID ============ */
 .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
 .stat-box {
-  background: var(--s1);
-  border: 0.5px solid var(--border);
-  border-radius: var(--r-md);
-  padding: 14px 12px;
+background: var(–s1);
+border: 0.5px solid var(–border);
+border-radius: var(–r-md);
+padding: 14px 12px;
 }
-.stat-val { font-family: var(--font-display); font-size: 30px; line-height: 1; color: var(--accent); }
-.stat-lbl { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.stat-val { font-family: var(–font-display); font-size: 30px; line-height: 1; color: var(–accent); }
+.stat-lbl { font-size: 11px; color: var(–muted); margin-top: 3px; }
 
 /* ============ BUTTONS ============ */
 .btn {
-  display: block; width: 100%;
-  padding: 14px 20px;
-  border-radius: var(--r-md);
-  border: none;
-  font-family: var(--font-body);
-  font-size: 15px; font-weight: 500;
-  cursor: pointer;
-  transition: opacity 0.15s, transform 0.1s;
-  text-align: center;
+display: block; width: 100%;
+padding: 14px 20px;
+border-radius: var(–r-md);
+border: none;
+font-family: var(–font-body);
+font-size: 15px; font-weight: 500;
+cursor: pointer;
+transition: opacity 0.15s, transform 0.1s;
+text-align: center;
 }
 .btn:active { transform: scale(0.97); }
 .btn + .btn { margin-top: 8px; }
-.btn-primary { background: var(--accent); color: #09090f; }
-.btn-secondary { background: var(--s2); color: var(--text); border: 0.5px solid var(--border); }
-.btn-danger { background: var(--red-dim); color: var(--red); border: 0.5px solid rgba(255,82,82,0.25); }
+.btn-primary { background: var(–accent); color: #09090f; }
+.btn-secondary { background: var(–s2); color: var(–text); border: 0.5px solid var(–border); }
+.btn-danger { background: var(–red-dim); color: var(–red); border: 0.5px solid rgba(255,82,82,0.25); }
 .btn:disabled { opacity: 0.4; pointer-events: none; }
 
 /* ============ INPUTS ============ */
 .field { margin-bottom: 12px; }
-.field-label { font-size: 11px; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; }
+.field-label { font-size: 11px; letter-spacing: 0.07em; color: var(–muted); margin-bottom: 5px; text-transform: uppercase; }
 .field-input {
-  width: 100%;
-  background: var(--s2);
-  border: 0.5px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 12px 14px;
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 15px;
-  outline: none;
-  transition: border-color 0.15s;
+width: 100%;
+background: var(–s2);
+border: 0.5px solid var(–border);
+border-radius: var(–r-sm);
+padding: 12px 14px;
+color: var(–text);
+font-family: var(–font-body);
+font-size: 15px;
+outline: none;
+transition: border-color 0.15s;
 }
-.field-input:focus { border-color: var(--accent); }
-.field-input::placeholder { color: var(--muted); }
+.field-input:focus { border-color: var(–accent); }
+.field-input::placeholder { color: var(–muted); }
 
 /* ============ TOGGLE ============ */
 .toggle-row {
-  display: flex; align-items: center;
-  padding: 13px 0;
-  border-bottom: 0.5px solid var(--border);
+display: flex; align-items: center;
+padding: 13px 0;
+border-bottom: 0.5px solid var(–border);
 }
 .toggle-row:last-child { border-bottom: none; }
 .toggle-info { flex: 1; }
 .toggle-name { font-size: 14px; font-weight: 500; }
-.toggle-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.toggle-desc { font-size: 11px; color: var(–muted); margin-top: 2px; }
 .toggle-sw {
-  width: 44px; height: 26px;
-  background: var(--s3);
-  border-radius: 13px;
-  position: relative;
-  cursor: pointer;
-  border: 0.5px solid var(--border);
-  transition: background 0.2s;
-  flex-shrink: 0;
+width: 44px; height: 26px;
+background: var(–s3);
+border-radius: 13px;
+position: relative;
+cursor: pointer;
+border: 0.5px solid var(–border);
+transition: background 0.2s;
+flex-shrink: 0;
 }
-.toggle-sw.on { background: var(--accent); border-color: var(--accent); }
+.toggle-sw.on { background: var(–accent); border-color: var(–accent); }
 .toggle-sw::after {
-  content: '';
-  position: absolute;
-  top: 3px; left: 3px;
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  background: var(--muted);
-  transition: transform 0.2s, background 0.2s;
+content: ‘’;
+position: absolute;
+top: 3px; left: 3px;
+width: 20px; height: 20px;
+border-radius: 50%;
+background: var(–muted);
+transition: transform 0.2s, background 0.2s;
 }
 .toggle-sw.on::after { transform: translateX(18px); background: #09090f; }
 
 /* ============ BADGE ============ */
 .badge {
-  display: inline-flex; align-items: center;
-  padding: 3px 9px;
-  border-radius: 20px;
-  font-size: 11px; font-weight: 500;
+display: inline-flex; align-items: center;
+padding: 3px 9px;
+border-radius: 20px;
+font-size: 11px; font-weight: 500;
 }
-.badge-accent { background: var(--accent-dim); color: var(--accent); }
-.badge-green { background: var(--green-dim); color: var(--green); }
-.badge-red { background: var(--red-dim); color: var(--red); }
-.badge-blue { background: var(--blue-dim); color: var(--blue); }
+.badge-accent { background: var(–accent-dim); color: var(–accent); }
+.badge-green { background: var(–green-dim); color: var(–green); }
+.badge-red { background: var(–red-dim); color: var(–red); }
+.badge-blue { background: var(–blue-dim); color: var(–blue); }
 
 /* ============ CONN STATUS BAR ============ */
 .conn-bar {
-  display: flex; align-items: center; gap: 8px;
-  padding: 9px 14px;
-  border-radius: var(--r-sm);
-  font-size: 12px;
-  margin-bottom: 14px;
+display: flex; align-items: center; gap: 8px;
+padding: 9px 14px;
+border-radius: var(–r-sm);
+font-size: 12px;
+margin-bottom: 14px;
 }
-.conn-bar.connected { background: var(--green-dim); color: var(--green); border: 0.5px solid rgba(71,255,178,0.2); }
-.conn-bar.disconnected { background: var(--red-dim); color: var(--red); border: 0.5px solid rgba(255,82,82,0.2); }
+.conn-bar.connected { background: var(–green-dim); color: var(–green); border: 0.5px solid rgba(71,255,178,0.2); }
+.conn-bar.disconnected { background: var(–red-dim); color: var(–red); border: 0.5px solid rgba(255,82,82,0.2); }
 .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 .conn-bar.connected .conn-dot { animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
 /* ============ THROW FEED ============ */
 .throw-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 11px 0;
-  border-bottom: 0.5px solid var(--border);
+display: flex; align-items: center; gap: 12px;
+padding: 11px 0;
+border-bottom: 0.5px solid var(–border);
 }
 .throw-row:last-child { border-bottom: none; }
 .throw-badge {
-  width: 46px; height: 46px;
-  border-radius: var(--r-sm);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display);
-  font-size: 20px;
-  flex-shrink: 0;
+width: 46px; height: 46px;
+border-radius: var(–r-sm);
+display: flex; align-items: center; justify-content: center;
+font-family: var(–font-display);
+font-size: 20px;
+flex-shrink: 0;
 }
 .throw-info { flex: 1; }
 .throw-player { font-size: 13px; font-weight: 500; }
-.throw-detail { font-size: 11px; color: var(--muted); margin-top: 1px; }
-.throw-time { font-size: 11px; color: var(--muted); }
+.throw-detail { font-size: 11px; color: var(–muted); margin-top: 1px; }
+.throw-time { font-size: 11px; color: var(–muted); }
 
 /* ============ DART INPUT MODAL ============ */
 #modal-bg {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.65);
-  z-index: 200;
-  align-items: flex-end;
-  justify-content: center;
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.65);
+z-index: 200;
+align-items: flex-end;
+justify-content: center;
 }
 #modal-bg.show { display: flex; }
 .modal-sheet {
-  background: var(--s1);
-  border-radius: var(--r-xl) var(--r-xl) 0 0;
-  padding: 14px 16px calc(env(safe-area-inset-bottom, 0px) + 20px);
-  width: 100%; max-width: 430px;
+background: var(–s1);
+border-radius: var(–r-xl) var(–r-xl) 0 0;
+padding: 14px 16px calc(env(safe-area-inset-bottom, 0px) + 20px);
+width: 100%; max-width: 430px;
 }
-.modal-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 14px; }
+.modal-handle { width: 36px; height: 4px; background: var(–border2); border-radius: 2px; margin: 0 auto 14px; }
 
 /* Dart slots */
 .dart-slots { display: flex; gap: 8px; margin-bottom: 14px; }
 .dart-slot {
-  flex: 1; height: 52px;
-  background: var(--s2);
-  border: 0.5px solid var(--border);
-  border-radius: var(--r-md);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-size: 18px;
-  color: var(--muted); transition: border-color 0.15s;
-  position: relative;
+flex: 1; height: 52px;
+background: var(–s2);
+border: 0.5px solid var(–border);
+border-radius: var(–r-md);
+display: flex; align-items: center; justify-content: center;
+font-family: var(–font-display); font-size: 18px;
+color: var(–muted); transition: border-color 0.15s;
+position: relative;
 }
-.dart-slot.active { border-color: var(--accent); color: var(--accent); }
-.dart-slot.done { color: var(--text); border-color: var(--border2); }
-.dart-slot.done.is-double { border-color: rgba(71,170,255,0.5); color: var(--blue); }
-.dart-slot.done.is-triple { border-color: rgba(212,255,71,0.6); color: var(--accent); }
-.dart-slot.done.is-miss   { border-color: rgba(255,82,82,0.4); color: var(--red); }
-.dart-slot-num { font-size: 10px; position: absolute; top: 4px; left: 7px; color: var(--muted); font-family: var(--font-body); }
+.dart-slot.active { border-color: var(–accent); color: var(–accent); }
+.dart-slot.done { color: var(–text); border-color: var(–border2); }
+.dart-slot.done.is-double { border-color: rgba(71,170,255,0.5); color: var(–blue); }
+.dart-slot.done.is-triple { border-color: rgba(212,255,71,0.6); color: var(–accent); }
+.dart-slot.done.is-miss   { border-color: rgba(255,82,82,0.4); color: var(–red); }
+.dart-slot-num { font-size: 10px; position: absolute; top: 4px; left: 7px; color: var(–muted); font-family: var(–font-body); }
 
 /* Multiplier buttons */
 .mult-row { display: flex; gap: 6px; margin-bottom: 10px; }
 .mult-btn {
-  flex: 1; height: 46px;
-  background: var(--s2);
-  border: 0.5px solid var(--border);
-  border-radius: var(--r-md);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 500;
-  cursor: pointer; color: var(--muted);
-  transition: all 0.12s; user-select: none;
+flex: 1; height: 46px;
+background: var(–s2);
+border: 0.5px solid var(–border);
+border-radius: var(–r-md);
+display: flex; align-items: center; justify-content: center;
+font-size: 13px; font-weight: 500;
+cursor: pointer; color: var(–muted);
+transition: all 0.12s; user-select: none;
 }
 .mult-btn:active { transform: scale(0.95); }
-.mult-btn.sel-S { background: var(--s3); color: var(--text); border-color: var(--border2); }
-.mult-btn.sel-D { background: var(--blue-dim); color: var(--blue); border-color: rgba(71,170,255,0.4); }
-.mult-btn.sel-T { background: var(--accent-dim); color: var(--accent); border-color: rgba(212,255,71,0.5); }
+.mult-btn.sel-S { background: var(–s3); color: var(–text); border-color: var(–border2); }
+.mult-btn.sel-D { background: var(–blue-dim); color: var(–blue); border-color: rgba(71,170,255,0.4); }
+.mult-btn.sel-T { background: var(–accent-dim); color: var(–accent); border-color: rgba(212,255,71,0.5); }
 .mult-btn.miss-btn { flex: 0.6; font-size: 12px; }
-.mult-btn.miss-btn.sel-M { background: var(--red-dim); color: var(--red); border-color: rgba(255,82,82,0.4); }
+.mult-btn.miss-btn.sel-M { background: var(–red-dim); color: var(–red); border-color: rgba(255,82,82,0.4); }
 
 /* Number grid */
 .num-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 5px; margin-bottom: 10px;
+display: grid;
+grid-template-columns: repeat(7, 1fr);
+gap: 5px; margin-bottom: 10px;
 }
 .num-btn {
-  height: 38px;
-  background: var(--s2);
-  border: 0.5px solid var(--border);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-size: 17px;
-  cursor: pointer; color: var(--text);
-  transition: background 0.1s, transform 0.08s;
-  user-select: none;
+height: 38px;
+background: var(–s2);
+border: 0.5px solid var(–border);
+border-radius: 8px;
+display: flex; align-items: center; justify-content: center;
+font-family: var(–font-display); font-size: 17px;
+cursor: pointer; color: var(–text);
+transition: background 0.1s, transform 0.08s;
+user-select: none;
 }
-.num-btn:active { transform: scale(0.9); background: var(--s3); }
+.num-btn:active { transform: scale(0.9); background: var(–s3); }
 .num-btn.disabled { opacity: 0.25; pointer-events: none; }
 .num-btn.bull-btn {
-  grid-column: span 2;
-  font-family: var(--font-body); font-size: 13px; font-weight: 500;
+grid-column: span 2;
+font-family: var(–font-body); font-size: 13px; font-weight: 500;
 }
 
 /* Turn summary row */
 .turn-summary {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 0 0;
-  border-top: 0.5px solid var(--border);
+display: flex; align-items: center; justify-content: space-between;
+padding: 10px 0 0;
+border-top: 0.5px solid var(–border);
 }
-.ts-score { font-family: var(--font-display); font-size: 28px; color: var(--accent); }
-.ts-remaining { font-size: 12px; color: var(--muted); text-align: right; }
-.ts-remaining strong { display: block; font-size: 16px; color: var(--text); font-family: var(--font-display); }
+.ts-score { font-family: var(–font-display); font-size: 28px; color: var(–accent); }
+.ts-remaining { font-size: 12px; color: var(–muted); text-align: right; }
+.ts-remaining strong { display: block; font-size: 16px; color: var(–text); font-family: var(–font-display); }
 
 /* ============ CHECKOUT HINT ============ */
 .checkout-hint {
-  background: var(--accent-dim);
-  border: 0.5px solid rgba(212,255,71,0.3);
-  border-radius: var(--r-md);
-  padding: 12px 14px;
-  color: var(--accent);
-  margin-bottom: 10px;
-  display: none;
+background: var(–accent-dim);
+border: 0.5px solid rgba(212,255,71,0.3);
+border-radius: var(–r-md);
+padding: 12px 14px;
+color: var(–accent);
+margin-bottom: 10px;
+display: none;
 }
 .checkout-hint.show { display: block; }
 .co-dart {
-  display: inline-flex; align-items: center; justify-content: center;
-  background: rgba(212,255,71,0.18);
-  border: 0.5px solid rgba(212,255,71,0.4);
-  border-radius: 8px;
-  padding: 6px 10px;
-  font-family: var(--font-display);
-  font-size: 18px;
-  min-width: 44px;
+display: inline-flex; align-items: center; justify-content: center;
+background: rgba(212,255,71,0.18);
+border: 0.5px solid rgba(212,255,71,0.4);
+border-radius: 8px;
+padding: 6px 10px;
+font-family: var(–font-display);
+font-size: 18px;
+min-width: 44px;
 }
 .co-dart.double { background: rgba(212,255,71,0.28); border-color: rgba(212,255,71,0.6); }
-.co-dart.triple { background: rgba(212,255,71,0.35); border-color: var(--accent); }
+.co-dart.triple { background: rgba(212,255,71,0.35); border-color: var(–accent); }
 .co-dart.bull   { background: rgba(255,82,82,0.2);   border-color: rgba(255,82,82,0.5); color: #ff8080; }
 .co-arrow { color: rgba(212,255,71,0.4); font-size: 14px; align-self: center; }
 
 /* ============ MUSIC GRID ============ */
 .music-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
 .music-card {
-  background: var(--s1);
-  border: 0.5px solid var(--border);
-  border-radius: var(--r-md);
-  padding: 16px 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+background: var(–s1);
+border: 0.5px solid var(–border);
+border-radius: var(–r-md);
+padding: 16px 12px;
+text-align: center;
+cursor: pointer;
+transition: border-color 0.15s, background 0.15s, transform 0.1s;
 }
 .music-card:active { transform: scale(0.95); }
-.music-card.playing { border-color: var(--accent); background: var(--accent-dim); }
+.music-card.playing { border-color: var(–accent); background: var(–accent-dim); }
 .music-card .mc-icon { font-size: 28px; margin-bottom: 6px; }
-.music-card .mc-label { font-size: 12px; color: var(--muted); }
-.music-card.playing .mc-label { color: var(--accent); }
+.music-card .mc-label { font-size: 12px; color: var(–muted); }
+.music-card.playing .mc-label { color: var(–accent); }
 
 /* ============ SETTINGS ROWS ============ */
 .settings-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 13px 0;
-  border-bottom: 0.5px solid var(--border);
-  cursor: pointer;
+display: flex; align-items: center; gap: 12px;
+padding: 13px 0;
+border-bottom: 0.5px solid var(–border);
+cursor: pointer;
 }
 .settings-row:last-child { border-bottom: none; }
 .settings-icon {
-  width: 34px; height: 34px;
-  border-radius: var(--r-sm);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 17px; flex-shrink: 0;
+width: 34px; height: 34px;
+border-radius: var(–r-sm);
+display: flex; align-items: center; justify-content: center;
+font-size: 17px; flex-shrink: 0;
 }
 .settings-text { flex: 1; }
 .settings-name { font-size: 14px; font-weight: 500; }
-.settings-desc { font-size: 11px; color: var(--muted); margin-top: 1px; }
-.settings-chevron { color: var(--muted); font-size: 16px; }
+.settings-desc { font-size: 11px; color: var(–muted); margin-top: 1px; }
+.settings-chevron { color: var(–muted); font-size: 16px; }
 
 /* ============ GAME CHIPS ============ */
 .chip-row { display: flex; gap: 7px; margin-bottom: 14px; flex-wrap: wrap; }
 .chip {
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 0.5px solid var(--border);
-  background: var(--s1);
-  font-size: 13px; font-weight: 500;
-  cursor: pointer; transition: all 0.15s;
+padding: 6px 14px;
+border-radius: 20px;
+border: 0.5px solid var(–border);
+background: var(–s1);
+font-size: 13px; font-weight: 500;
+cursor: pointer; transition: all 0.15s;
 }
-.chip.active { background: var(--accent); color: #09090f; border-color: var(--accent); }
+.chip.active { background: var(–accent); color: #09090f; border-color: var(–accent); }
 
 /* ============ TOAST ============ */
 #toast {
-  position: fixed;
-  bottom: calc(var(--nav-h) + 12px);
-  left: 50%; transform: translateX(-50%);
-  background: var(--s3);
-  color: var(--text);
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-size: 14px; font-weight: 500;
-  z-index: 999;
-  white-space: nowrap;
-  pointer-events: none;
-  display: none;
-  border: 0.5px solid var(--border2);
-  transition: opacity 0.3s;
+position: fixed;
+bottom: calc(var(–nav-h) + 12px);
+left: 50%; transform: translateX(-50%);
+background: var(–s3);
+color: var(–text);
+padding: 10px 20px;
+border-radius: 20px;
+font-size: 14px; font-weight: 500;
+z-index: 999;
+white-space: nowrap;
+pointer-events: none;
+display: none;
+border: 0.5px solid var(–border2);
+transition: opacity 0.3s;
 }
-#toast.special { background: var(--accent); color: #09090f; border-color: var(--accent); }
+#toast.special { background: var(–accent); color: #09090f; border-color: var(–accent); }
 
 /* ============ HOME LOGO ============ */
 .home-logo-area {
-  padding: calc(var(--safe-top) + 10px) 16px 0;
-  display: flex; align-items: center; justify-content: space-between;
+padding: calc(var(–safe-top) + 10px) 16px 0;
+display: flex; align-items: center; justify-content: space-between;
 }
-.home-logo { font-family: var(--font-display); font-size: 42px; letter-spacing: 0.05em; }
-.home-logo span { color: var(--accent); }
-.home-tagline { font-size: 12px; color: var(--muted); margin: 2px 0 16px 16px; }
+.home-logo { font-family: var(–font-display); font-size: 42px; letter-spacing: 0.05em; }
+.home-logo span { color: var(–accent); }
+.home-tagline { font-size: 12px; color: var(–muted); margin: 2px 0 16px 16px; }
 .gear-btn {
-  background: var(--s2); border: 0.5px solid var(--border);
-  border-radius: 50%; width: 36px; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; cursor: pointer; flex-shrink: 0;
-  margin-top: 8px;
+background: var(–s2); border: 0.5px solid var(–border);
+border-radius: 50%; width: 36px; height: 36px;
+display: flex; align-items: center; justify-content: center;
+font-size: 18px; cursor: pointer; flex-shrink: 0;
+margin-top: 8px;
 }
 
 /* ============ STATUS FEEDBACK ============ */
 .status-msg {
-  display: none;
-  align-items: center; gap: 8px;
-  padding: 10px 14px;
-  border-radius: var(--r-sm);
-  font-size: 13px;
-  margin-bottom: 12px;
+display: none;
+align-items: center; gap: 8px;
+padding: 10px 14px;
+border-radius: var(–r-sm);
+font-size: 13px;
+margin-bottom: 12px;
 }
 .status-msg.show { display: flex; }
-.status-msg.loading { background: var(--accent-dim); color: var(--accent); border: 0.5px solid rgba(212,255,71,0.2); }
-.status-msg.success { background: var(--green-dim); color: var(--green); border: 0.5px solid rgba(71,255,178,0.2); }
-.status-msg.error { background: var(--red-dim); color: var(--red); border: 0.5px solid rgba(255,82,82,0.2); }
+.status-msg.loading { background: var(–accent-dim); color: var(–accent); border: 0.5px solid rgba(212,255,71,0.2); }
+.status-msg.success { background: var(–green-dim); color: var(–green); border: 0.5px solid rgba(71,255,178,0.2); }
+.status-msg.error { background: var(–red-dim); color: var(–red); border: 0.5px solid rgba(255,82,82,0.2); }
 @keyframes spin { to { transform: rotate(360deg); } }
-.spinner { width: 13px; height: 13px; border: 2px solid rgba(212,255,71,0.3); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
-
+.spinner { width: 13px; height: 13px; border: 2px solid rgba(212,255,71,0.3); border-top-color: var(–accent); border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
 
 /* ============ UNDO / EDIT ============ */
 .undo-bar {
-  display: flex; gap: 8px; margin-bottom: 10px;
+display: flex; gap: 8px; margin-bottom: 10px;
 }
 .undo-btn {
-  flex: 1; height: 40px;
-  background: var(--s2);
-  border: 0.5px solid var(--border);
-  border-radius: var(--r-md);
-  display: flex; align-items: center; justify-content: center;
-  gap: 6px; font-size: 13px; font-weight: 500;
-  color: var(--muted2); cursor: pointer;
-  transition: background 0.12s, color 0.12s;
+flex: 1; height: 40px;
+background: var(–s2);
+border: 0.5px solid var(–border);
+border-radius: var(–r-md);
+display: flex; align-items: center; justify-content: center;
+gap: 6px; font-size: 13px; font-weight: 500;
+color: var(–muted2); cursor: pointer;
+transition: background 0.12s, color 0.12s;
 }
-.undo-btn:active { background: var(--s3); }
-.undo-btn.enabled { color: var(--text); border-color: var(--border2); }
-.undo-btn.enabled:active { background: var(--s3); }
+.undo-btn:active { background: var(–s3); }
+.undo-btn.enabled { color: var(–text); border-color: var(–border2); }
+.undo-btn.enabled:active { background: var(–s3); }
 
 /* Edit turn modal */
 #edit-modal-bg {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.65); z-index: 210;
-  align-items: flex-end; justify-content: center;
+display: none; position: fixed; inset: 0;
+background: rgba(0,0,0,0.65); z-index: 210;
+align-items: flex-end; justify-content: center;
 }
 #edit-modal-bg.show { display: flex; }
 .edit-sheet {
-  background: var(--s1);
-  border-radius: var(--r-xl) var(--r-xl) 0 0;
-  padding: 14px 16px calc(env(safe-area-inset-bottom,0px) + 20px);
-  width: 100%; max-width: 430px;
+background: var(–s1);
+border-radius: var(–r-xl) var(–r-xl) 0 0;
+padding: 14px 16px calc(env(safe-area-inset-bottom,0px) + 20px);
+width: 100%; max-width: 430px;
 }
-.edit-title { font-family: var(--font-display); font-size: 22px; margin-bottom: 4px; }
-.edit-sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.edit-title { font-family: var(–font-display); font-size: 22px; margin-bottom: 4px; }
+.edit-sub { font-size: 12px; color: var(–muted); margin-bottom: 14px; }
 .edit-darts { display: flex; gap: 8px; margin-bottom: 14px; }
 .edit-dart {
-  flex: 1; background: var(--s2); border: 0.5px solid var(--border);
-  border-radius: var(--r-md); padding: 10px 8px; text-align: center;
-  cursor: pointer; transition: border-color 0.15s;
+flex: 1; background: var(–s2); border: 0.5px solid var(–border);
+border-radius: var(–r-md); padding: 10px 8px; text-align: center;
+cursor: pointer; transition: border-color 0.15s;
 }
-.edit-dart.selected { border-color: var(--accent); background: var(--accent-dim); }
-.edit-dart-num { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
-.edit-dart-val { font-family: var(--font-display); font-size: 20px; color: var(--text); }
-.edit-dart-val.is-double { color: var(--blue); }
-.edit-dart-val.is-triple { color: var(--accent); }
-.edit-dart-val.is-miss   { color: var(--red); }
-.edit-note { font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 12px; }
+.edit-dart.selected { border-color: var(–accent); background: var(–accent-dim); }
+.edit-dart-num { font-size: 10px; color: var(–muted); margin-bottom: 4px; }
+.edit-dart-val { font-family: var(–font-display); font-size: 20px; color: var(–text); }
+.edit-dart-val.is-double { color: var(–blue); }
+.edit-dart-val.is-triple { color: var(–accent); }
+.edit-dart-val.is-miss   { color: var(–red); }
+.edit-note { font-size: 11px; color: var(–muted); text-align: center; margin-bottom: 12px; }
+
+/* ============ AVG BANNER ============ */
+.avg-banner {
+display: flex; align-items: center; gap: 0;
+background: var(–s2); border: 0.5px solid var(–border);
+border-radius: var(–r-md); margin-bottom: 10px; overflow: hidden;
+}
+.avg-cell {
+flex: 1; padding: 10px 8px; text-align: center;
+border-right: 0.5px solid var(–border);
+}
+.avg-cell:last-child { border-right: none; }
+.avg-cell-val { font-family: var(–font-display); font-size: 22px; line-height: 1; }
+.avg-cell-lbl { font-size: 10px; color: var(–muted); margin-top: 2px; letter-spacing:0.06em; }
+
+/* ============ DARTBOARD SVG ============ */
+.board-wrap {
+background: var(–s1); border: 0.5px solid var(–border);
+border-radius: var(–r-lg); padding: 12px; margin-bottom: 10px;
+display: flex; flex-direction: column; align-items: center;
+}
+.board-title { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(–muted); margin-bottom: 10px; align-self: flex-start; }
+#dartboard-svg { width: 100%; max-width: 260px; }
+
+/* ============ BULLOFF ============ */
+#bulloff-screen {
+display: none; position: fixed; inset: 0;
+background: var(–bg); z-index: 300;
+flex-direction: column; align-items: center; justify-content: center;
+padding: 24px;
+}
+#bulloff-screen.show { display: flex; }
+.bulloff-title { font-family: var(–font-display); font-size: 52px; letter-spacing: 0.04em; margin-bottom: 6px; text-align: center; }
+.bulloff-sub { font-size: 14px; color: var(–muted); margin-bottom: 40px; text-align: center; }
+.bulloff-players { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 320px; margin-bottom: 32px; }
+.bulloff-player-btn {
+display: flex; align-items: center; gap: 14px;
+background: var(–s1); border: 0.5px solid var(–border);
+border-radius: var(–r-lg); padding: 16px 20px; cursor: pointer;
+transition: border-color 0.15s, background 0.15s;
+}
+.bulloff-player-btn:active { transform: scale(0.97); }
+.bulloff-player-btn.winner { border-color: var(–accent); background: var(–accent-dim); }
+.bo-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(–font-display); font-size: 18px; flex-shrink: 0; }
+.bo-name { font-size: 16px; font-weight: 500; flex: 1; }
+.bo-crown { font-size: 20px; }
+.bulloff-skip { font-size: 13px; color: var(–muted); cursor: pointer; text-decoration: underline; }
+
+/* ============ WALK-ON ============ */
+.walkon-bar {
+display: flex; align-items: center; gap: 10px;
+background: var(–s2); border: 0.5px solid var(–border);
+border-radius: var(–r-md); padding: 10px 12px; margin-bottom: 8px;
+}
+.walkon-icon { font-size: 20px; flex-shrink: 0; }
+.walkon-info { flex: 1; min-width: 0; }
+.walkon-name { font-size: 13px; font-weight: 500; }
+.walkon-link { font-size: 11px; color: var(–muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+.walkon-play { background: var(–accent); color: #09090f; border: none; border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+.walkon-remove { background: none; border: none; color: var(–muted); font-size: 18px; cursor: pointer; padding: 4px; }
+
+/* ============ BOT ============ */
+.bot-card {
+background: var(–s1); border: 0.5px solid var(–border);
+border-radius: var(–r-lg); padding: 14px 16px; margin-bottom: 10px;
+}
+.bot-level-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.bot-level-label { font-size: 13px; color: var(–muted); width: 60px; }
+.bot-level-val { font-family: var(–font-display); font-size: 28px; color: var(–accent); width: 32px; }
+.bot-level-slider { flex: 1; accent-color: var(–accent); }
+.bot-level-desc { font-size: 11px; color: var(–muted); }
+.bot-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; background: rgba(147,71,255,0.12); color: #b47fff; border: 0.5px solid rgba(147,71,255,0.3); margin-bottom: 8px; }
 
 /* ============ WS LOG ============ */
-.ws-log { background: var(--s2); border-radius: var(--r-sm); padding: 10px 12px; font-family: monospace; font-size: 11px; color: var(--muted); max-height: 80px; overflow-y: auto; margin-top: 8px; }
+.ws-log { background: var(–s2); border-radius: var(–r-sm); padding: 10px 12px; font-family: monospace; font-size: 11px; color: var(–muted); max-height: 80px; overflow-y: auto; margin-top: 8px; }
 </style>
+
 </head>
 <body>
 <div id="app">
 
   <!-- ===== SCREEN: HOME ===== -->
+
   <div class="screen active" id="screen-home">
     <div class="home-logo-area">
       <div>
@@ -617,6 +691,7 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
   </div>
 
   <!-- ===== SCREEN: GAME ===== -->
+
   <div class="screen" id="screen-game">
     <div class="sh">
       <div class="sh-back" onclick="nav('home')">←</div>
@@ -627,6 +702,11 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
       <div class="sh-action"><span class="badge badge-accent" id="game-leg-badge">Leg 1</span></div>
     </div>
     <div class="scroll">
+      <div class="avg-banner" id="avg-banner">
+        <div class="avg-cell"><div class="avg-cell-val" id="avg-mine" style="color:var(--accent)">0</div><div class="avg-cell-lbl">MIJN GEM</div></div>
+        <div class="avg-cell"><div class="avg-cell-val" id="avg-high">0</div><div class="avg-cell-lbl">HOOGSTE</div></div>
+        <div class="avg-cell"><div class="avg-cell-val" id="avg-turns">0</div><div class="avg-cell-lbl">BEURTEN</div></div>
+      </div>
       <div id="game-players"></div>
       <div class="checkout-hint" id="checkout-hint">
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
@@ -641,12 +721,22 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
         <div class="undo-btn" id="undo-btn" onclick="undoTurn()">↩ Ongedaan maken</div>
         <div class="undo-btn" id="edit-btn" onclick="openEditTurn()">✏ Beurt aanpassen</div>
       </div>
-      <div class="section-label" style="margin-top:18px">Deze leg</div>
+      <div class="section-label" style="margin-top:14px">Pijlposities</div>
+      <div class="board-wrap" id="board-wrap">
+        <div class="board-title">Live via Autodarts</div>
+        <svg id="dartboard-svg" viewBox="-105 -105 210 210" xmlns="http://www.w3.org/2000/svg">
+          <!-- Board rings will be drawn by JS -->
+          <g id="board-segments"></g>
+          <g id="dart-markers"></g>
+        </svg>
+      </div>
+      <div class="section-label">Deze leg</div>
       <div class="stat-grid" id="game-stats"></div>
     </div>
   </div>
 
   <!-- ===== SCREEN: STATS ===== -->
+
   <div class="screen" id="screen-stats">
     <div class="sh">
       <div class="sh-titles">
@@ -660,6 +750,7 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
   </div>
 
   <!-- ===== SCREEN: PLAYERS ===== -->
+
   <div class="screen" id="screen-players">
     <div class="sh">
       <div class="sh-back" onclick="nav('home')">←</div>
@@ -677,10 +768,24 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
           <button class="btn btn-primary" style="width:auto;padding:12px 18px;margin:0" onclick="addPlayer()">+</button>
         </div>
       </div>
+      <div class="section-label">Walk-on songs</div>
+      <div id="walkon-list"></div>
+      <div class="section-label" style="margin-top:16px">🤖 Bot toevoegen</div>
+      <div class="bot-card">
+        <div class="bot-badge">🤖 CPU Speler</div>
+        <div class="bot-level-row">
+          <span class="bot-level-label">Level</span>
+          <span class="bot-level-val" id="bot-level-val">5</span>
+          <input type="range" min="1" max="10" value="5" class="bot-level-slider" id="bot-level-slider" oninput="updateBotLevel(this.value)">
+        </div>
+        <div class="bot-level-desc" id="bot-level-desc">Gemiddeld: 65-75 per beurt</div>
+        <button class="btn btn-secondary" style="margin-top:8px" onclick="addBot()">Bot toevoegen</button>
+      </div>
     </div>
   </div>
 
   <!-- ===== SCREEN: MUSIC ===== -->
+
   <div class="screen" id="screen-music">
     <div class="sh">
       <div class="sh-titles">
@@ -715,6 +820,7 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
   </div>
 
   <!-- ===== SCREEN: SETTINGS ===== -->
+
   <div class="screen" id="screen-settings">
     <div class="sh">
       <div class="sh-back" onclick="nav('home')">←</div>
@@ -735,11 +841,11 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
           <input class="field-input" id="st-board" type="text" placeholder="bijv. abc123-xxxx-xxxx" autocomplete="off" spellcheck="false" autocorrect="off">
         </div>
         <div class="field">
-          <div class="field-label">Bearer token</div>
-          <input class="field-input" id="st-token" type="password" placeholder="Jouw Autodarts token...">
+          <div class="field-label">API Key</div>
+          <input class="field-input" id="st-token" type="password" placeholder="Jouw Autodarts API key...">
         </div>
         <div style="background:var(--blue-dim);border:0.5px solid rgba(71,170,255,0.2);border-radius:var(--r-sm);padding:10px 13px;font-size:12px;color:var(--blue);margin-bottom:12px">
-          ℹ Ga naar <strong style="color:var(--text)">play.autodarts.io</strong> → Profiel → API
+          ℹ Ga naar <strong style="color:var(--text)">play.autodarts.io</strong> → Profiel → API → Board credentials
         </div>
         <div class="status-msg" id="st-status"></div>
         <div class="ws-log" id="ws-log" style="display:none"></div>
@@ -747,18 +853,22 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
         <button class="btn btn-danger" style="margin-top:8px" onclick="disconnectWS()">Verbinding verwijderen</button>
       </div>
 
-      <div class="section-label">App</div>
-      <div class="card">
-        <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Checkout suggesties</div><div class="toggle-desc">Toont beste uitweg bij lage score</div></div><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></div>
-        <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Geluidseffecten</div><div class="toggle-desc">Geluiden bij bijzondere worpen</div></div><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></div>
-        <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Scherm actief houden</div><div class="toggle-desc">Voorkomt dimmen tijdens spel</div></div><div class="toggle-sw" id="wake-lock-sw" onclick="toggleWakeLock(this)"></div></div>
-      </div>
+```
+  <div class="section-label">App</div>
+  <div class="card">
+    <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Checkout suggesties</div><div class="toggle-desc">Toont beste uitweg bij lage score</div></div><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></div>
+    <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Geluidseffecten</div><div class="toggle-desc">Geluiden bij bijzondere worpen</div></div><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></div>
+    <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Scherm actief houden</div><div class="toggle-desc">Voorkomt dimmen tijdens spel</div></div><div class="toggle-sw" id="wake-lock-sw" onclick="toggleWakeLock(this)"></div></div>
+  </div>
 
-      <div style="text-align:center;padding:24px 0 8px;font-size:12px;color:var(--muted)">DartMate · Gemaakt met Claude</div>
-    </div>
+  <div style="text-align:center;padding:24px 0 8px;font-size:12px;color:var(--muted)">DartMate · Gemaakt met Claude</div>
+</div>
+```
+
   </div>
 
   <!-- ===== BOTTOM NAV ===== -->
+
   <div id="nav">
     <button class="nav-btn active" data-screen="home" onclick="nav('home')">
       <span class="nav-icon">🎯</span><span class="nav-label">Home</span>
@@ -780,65 +890,79 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 </div>
 
 <!-- ===== DART INPUT MODAL ===== -->
+
 <div id="modal-bg" onclick="handleModalBgClick(event)">
   <div class="modal-sheet" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
 
-    <!-- 3 dart slots -->
-    <div class="dart-slots">
-      <div class="dart-slot active" id="slot-0"><span class="dart-slot-num">1</span>—</div>
-      <div class="dart-slot" id="slot-1"><span class="dart-slot-num">2</span>—</div>
-      <div class="dart-slot" id="slot-2"><span class="dart-slot-num">3</span>—</div>
-    </div>
+```
+<!-- 3 dart slots -->
+<div class="dart-slots">
+  <div class="dart-slot active" id="slot-0"><span class="dart-slot-num">1</span>—</div>
+  <div class="dart-slot" id="slot-1"><span class="dart-slot-num">2</span>—</div>
+  <div class="dart-slot" id="slot-2"><span class="dart-slot-num">3</span>—</div>
+</div>
 
-    <!-- S / D / T / Miss -->
-    <div class="mult-row">
-      <div class="mult-btn" id="mb-S" onclick="selMult('S')">Single</div>
-      <div class="mult-btn" id="mb-D" onclick="selMult('D')">Double</div>
-      <div class="mult-btn" id="mb-T" onclick="selMult('T')">Triple</div>
-      <div class="mult-btn miss-btn" id="mb-M" onclick="selMult('M')">Miss</div>
-    </div>
+<!-- S / D / T / Miss -->
+<div class="mult-row">
+  <div class="mult-btn" id="mb-S" onclick="selMult('S')">Single</div>
+  <div class="mult-btn" id="mb-D" onclick="selMult('D')">Double</div>
+  <div class="mult-btn" id="mb-T" onclick="selMult('T')">Triple</div>
+  <div class="mult-btn miss-btn" id="mb-M" onclick="selMult('M')">Miss</div>
+</div>
 
-    <!-- Number grid 1-20 + Bull -->
-    <div class="num-grid" id="num-grid">
-      <div class="num-btn" onclick="selNum(1)">1</div>
-      <div class="num-btn" onclick="selNum(2)">2</div>
-      <div class="num-btn" onclick="selNum(3)">3</div>
-      <div class="num-btn" onclick="selNum(4)">4</div>
-      <div class="num-btn" onclick="selNum(5)">5</div>
-      <div class="num-btn" onclick="selNum(6)">6</div>
-      <div class="num-btn" onclick="selNum(7)">7</div>
-      <div class="num-btn" onclick="selNum(8)">8</div>
-      <div class="num-btn" onclick="selNum(9)">9</div>
-      <div class="num-btn" onclick="selNum(10)">10</div>
-      <div class="num-btn" onclick="selNum(11)">11</div>
-      <div class="num-btn" onclick="selNum(12)">12</div>
-      <div class="num-btn" onclick="selNum(13)">13</div>
-      <div class="num-btn" onclick="selNum(14)">14</div>
-      <div class="num-btn" onclick="selNum(15)">15</div>
-      <div class="num-btn" onclick="selNum(16)">16</div>
-      <div class="num-btn" onclick="selNum(17)">17</div>
-      <div class="num-btn" onclick="selNum(18)">18</div>
-      <div class="num-btn" onclick="selNum(19)">19</div>
-      <div class="num-btn" onclick="selNum(20)">20</div>
-      <div class="num-btn bull-btn" id="bull-btn" onclick="selBull()">Bull</div>
-    </div>
+<!-- Number grid 1-20 + Bull -->
+<div class="num-grid" id="num-grid">
+  <div class="num-btn" onclick="selNum(1)">1</div>
+  <div class="num-btn" onclick="selNum(2)">2</div>
+  <div class="num-btn" onclick="selNum(3)">3</div>
+  <div class="num-btn" onclick="selNum(4)">4</div>
+  <div class="num-btn" onclick="selNum(5)">5</div>
+  <div class="num-btn" onclick="selNum(6)">6</div>
+  <div class="num-btn" onclick="selNum(7)">7</div>
+  <div class="num-btn" onclick="selNum(8)">8</div>
+  <div class="num-btn" onclick="selNum(9)">9</div>
+  <div class="num-btn" onclick="selNum(10)">10</div>
+  <div class="num-btn" onclick="selNum(11)">11</div>
+  <div class="num-btn" onclick="selNum(12)">12</div>
+  <div class="num-btn" onclick="selNum(13)">13</div>
+  <div class="num-btn" onclick="selNum(14)">14</div>
+  <div class="num-btn" onclick="selNum(15)">15</div>
+  <div class="num-btn" onclick="selNum(16)">16</div>
+  <div class="num-btn" onclick="selNum(17)">17</div>
+  <div class="num-btn" onclick="selNum(18)">18</div>
+  <div class="num-btn" onclick="selNum(19)">19</div>
+  <div class="num-btn" onclick="selNum(20)">20</div>
+  <div class="num-btn bull-btn" id="bull-btn" onclick="selBull()">Bull</div>
+</div>
 
-    <!-- Turn summary -->
-    <div class="turn-summary">
-      <div>
-        <div style="font-size:10px;color:var(--muted);letter-spacing:0.08em;margin-bottom:2px">BEURT SCORE</div>
-        <div class="ts-score" id="ts-score">0</div>
-      </div>
-      <div class="ts-remaining" id="ts-remaining">
-        <div style="font-size:10px;color:var(--muted);letter-spacing:0.08em;margin-bottom:2px">NA DEZE BEURT</div>
-        <strong id="ts-left">—</strong>
-      </div>
-    </div>
+<!-- Turn summary -->
+<div class="turn-summary">
+  <div>
+    <div style="font-size:10px;color:var(--muted);letter-spacing:0.08em;margin-bottom:2px">BEURT SCORE</div>
+    <div class="ts-score" id="ts-score">0</div>
+  </div>
+  <div class="ts-remaining" id="ts-remaining">
+    <div style="font-size:10px;color:var(--muted);letter-spacing:0.08em;margin-bottom:2px">NA DEZE BEURT</div>
+    <strong id="ts-left">—</strong>
+  </div>
+</div>
+```
+
   </div>
 </div>
 
+<!-- ===== BULLOFF SCREEN ===== -->
+
+<div id="bulloff-screen">
+  <div class="bulloff-title">🎯 Bulloff</div>
+  <div class="bulloff-sub">Tik de speler die het dichtstbij de bull gooit</div>
+  <div class="bulloff-players" id="bulloff-players"></div>
+  <div class="bulloff-skip" onclick="skipBulloff()">Overslaan — begin gewoon</div>
+</div>
+
 <!-- ===== EDIT TURN MODAL ===== -->
+
 <div id="edit-modal-bg" onclick="handleEditBgClick(event)">
   <div class="edit-sheet" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
@@ -881,6 +1005,7 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 </div>
 
 <!-- ===== TOAST ===== -->
+
 <div id="toast"></div>
 
 <script>
@@ -1064,6 +1189,7 @@ function renderGame() {
     </div>`;
   }).join('');
 
+  updateAvgBanner();
   const score = state.scores[p.name] ?? state.startScore;
   const co = score <= 170 ? CHECKOUTS[score] : null;
   const hint = document.getElementById('checkout-hint');
@@ -1108,6 +1234,7 @@ function renderStats() {
 
 // ============ RENDER: PLAYERS ============
 function renderPlayers() {
+  renderWalkonList();
   document.getElementById('players-list').innerHTML = state.players.map((p,i) => {
     const c = COLORS[p.color % COLORS.length];
     return `<div class="player-card">
@@ -1155,7 +1282,7 @@ function startGame() {
   state.leg = 1;
   state.turn = 0;
   state.throws = [];
-  nav('game');
+  showBulloff();
 }
 
 // ============ DART INPUT ============
@@ -1227,6 +1354,7 @@ function addDart(dart) {
 
   dartTurn.push(dart);
   curMult = null;
+  updateDartMarkers(dartTurn);
   ['S','D','T','M'].forEach(x => {
     document.getElementById('mb-'+x).className = 'mult-btn' + (x === 'M' ? ' miss-btn' : '');
   });
@@ -1380,6 +1508,283 @@ function removePlayer(i) {
   renderPlayers();
 }
 
+
+
+// ============ BULLOFF ============
+function showBulloff() {
+  const el = document.getElementById('bulloff-players');
+  el.innerHTML = state.players.map((p,i) => {
+    const c = COLORS[p.color % COLORS.length];
+    return `<div class="bulloff-player-btn" id="bo-${i}" onclick="selectBulloffWinner(${i})">
+      <div class="bo-avatar" style="background:${c.bg};color:${c.text}">${initials(p.name)}</div>
+      <div class="bo-name">${p.name}${p.isBot?' 🤖':''}</div>
+      <div class="bo-crown" style="display:none">👑</div>
+    </div>`;
+  }).join('');
+  document.getElementById('bulloff-screen').classList.add('show');
+}
+
+function selectBulloffWinner(idx) {
+  document.querySelectorAll('.bulloff-player-btn').forEach((b,i) => {
+    b.classList.toggle('winner', i === idx);
+    b.querySelector('.bo-crown').style.display = i === idx ? 'block' : 'none';
+  });
+  state.turn = idx;
+  // Play walk-on for winner
+  const p = state.players[idx];
+  if (p && p.walkon) playWalkon(p.walkon, p.name);
+  setTimeout(() => {
+    document.getElementById('bulloff-screen').classList.remove('show');
+    nav('game');
+  }, 800);
+}
+
+function skipBulloff() {
+  document.getElementById('bulloff-screen').classList.remove('show');
+  nav('game');
+}
+
+// ============ WALK-ON ============
+function renderWalkonList() {
+  const el = document.getElementById('walkon-list');
+  if (!el) return;
+  if (state.players.length === 0) { el.innerHTML = '<div style="color:var(--muted);font-size:13px">Voeg eerst spelers toe</div>'; return; }
+  el.innerHTML = state.players.map((p,i) => {
+    const c = COLORS[p.color % COLORS.length];
+    return `<div class="walkon-bar">
+      <div class="walkon-icon">${p.isBot ? '🤖' : '🎵'}</div>
+      <div class="walkon-info">
+        <div class="walkon-name">${p.name}</div>
+        <div class="walkon-link">${p.walkon ? p.walkon : 'Geen song'}</div>
+      </div>
+      ${p.isBot ? '' : `<button class="walkon-play" onclick="editWalkon(${i})">+ Link</button>`}
+    </div>`;
+  }).join('');
+}
+
+function editWalkon(idx) {
+  const p = state.players[idx];
+  const url = prompt(`Walk-on song voor ${p.name}:
+Plak een Spotify of Apple Music link:`, p.walkon || '');
+  if (url !== null) {
+    state.players[idx].walkon = url.trim();
+    renderWalkonList();
+  }
+}
+
+function playWalkon(url, name) {
+  if (!url) return;
+  toast(`🎵 Walk-on: ${name}!`, true);
+  window.open(url, '_blank');
+}
+
+// ============ BOT ============
+const BOT_LEVELS = {
+  1:{min:25,max:34,name:'Beginner'},
+  2:{min:30,max:44,name:'Makkelijk'},
+  3:{min:40,max:54,name:'Onder gemiddeld'},
+  4:{min:50,max:64,name:'Gemiddeld-'},
+  5:{min:60,max:74,name:'Gemiddeld'},
+  6:{min:68,max:84,name:'Gemiddeld+'},
+  7:{min:76,max:94,name:'Gevorderd'},
+  8:{min:85,max:104,name:'Gevorderd+'},
+  9:{min:95,max:114,name:'Expert'},
+  10:{min:105,max:125,name:'Pro'}
+};
+
+function updateBotLevel(val) {
+  const lv = BOT_LEVELS[val];
+  document.getElementById('bot-level-val').textContent = val;
+  document.getElementById('bot-level-desc').textContent = `${lv.name} — gem. ${lv.min}–${lv.max} per beurt`;
+}
+
+function addBot() {
+  const level = parseInt(document.getElementById('bot-level-slider').value);
+  const lv = BOT_LEVELS[level];
+  const name = `Bot L${level}`;
+  const color = state.players.length % COLORS.length;
+  state.players.push({name, color, isBot:true, botLevel:level, botRange:lv});
+  state.scores[name] = state.startScore;
+  state.dartsThrown[name] = 0;
+  state.stats[name] = {total:0,turns:0,checkouts:0,high:0,busts:0};
+  renderPlayers();
+  renderWalkonList();
+  toast(`🤖 ${name} toegevoegd (${lv.name})`);
+}
+
+function doBotTurn() {
+  const p = state.players[state.turn];
+  if (!p || !p.isBot) return;
+  const lv = p.botRange || BOT_LEVELS[5];
+  const cur = state.scores[p.name] ?? state.startScore;
+
+  // Generate bot score within range, respect remaining
+  let scored = Math.floor(Math.random() * (lv.max - lv.min + 1)) + lv.min;
+  scored = Math.min(scored, 180);
+  const next = cur - scored;
+
+  const s = state.stats[p.name];
+  if (next < 0 || next === 1) {
+    s.busts++;
+    state.throws.push({player:p.name, score:0, remaining:cur, time:now(), darts:'Bust', dartObjs:[], wasBust:true});
+    toast(`🤖 ${p.name} mist — Bust!`);
+  } else if (next === 0) {
+    s.total += scored; s.turns++; s.checkouts++;
+    state.scores[p.name] = 0;
+    state.throws.push({player:p.name, score:scored, remaining:0, time:now(), darts:`Bot ${scored}`, dartObjs:[], wasCheckout:true});
+    toast(`🤖 ${p.name} checkt uit! 🏆`, true);
+    setTimeout(() => { state.leg++; initScores(); state.turn = 0; renderGame(); }, 2000);
+    return;
+  } else {
+    s.total += scored; s.turns++;
+    if (scored > s.high) s.high = scored;
+    state.scores[p.name] = next;
+    state.dartsThrown[p.name] = (state.dartsThrown[p.name]||0) + 3;
+    state.throws.push({player:p.name, score:scored, remaining:next, time:now(), darts:`Bot ${scored}`, dartObjs:[]});
+    if (scored >= 140) toast(`🤖 ${p.name} gooit ${scored}!`, scored === 180);
+    state.turn = (state.turn + 1) % state.players.length;
+  }
+  updateUndoButtons();
+  renderGame();
+  // Chain bot turns
+  setTimeout(() => {
+    const nextP = state.players[state.turn];
+    if (nextP && nextP.isBot) doBotTurn();
+  }, 1200);
+}
+
+// ============ DARTBOARD SVG ============
+const BOARD_ORDER = [20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5];
+const DEG = 360 / 20;
+
+function drawBoard() {
+  const seg = document.getElementById('board-segments');
+  if (!seg) return;
+  seg.innerHTML = '';
+
+  const colors = { dark:'#1a1a1a', light:'#2d2d2d', red:'#c0392b', green:'#27ae60', bull:'#c0392b', bullOuter:'#27ae60' };
+  const radii = { double:[88,100], outer:[16,88], triple:[56,68], inner:[0,16] };
+
+  BOARD_ORDER.forEach((num, i) => {
+    const startDeg = i * DEG - 90 - DEG/2;
+    const endDeg = startDeg + DEG;
+    const isDark = i % 2 === 0;
+    const isSpecial = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5].indexOf(num) % 2 === 0;
+
+    // Outer single
+    seg.appendChild(makeArc(startDeg, endDeg, 68, 88, isDark ? colors.dark : colors.light, num, 'single'));
+    // Inner single
+    seg.appendChild(makeArc(startDeg, endDeg, 16, 56, isDark ? colors.dark : colors.light, num, 'single'));
+    // Double ring
+    seg.appendChild(makeArc(startDeg, endDeg, 88, 100, isSpecial ? colors.red : colors.green, num, 'double'));
+    // Triple ring
+    seg.appendChild(makeArc(startDeg, endDeg, 56, 68, isSpecial ? colors.red : colors.green, num, 'triple'));
+
+    // Number label
+    const angle = (startDeg + endDeg) / 2 * Math.PI / 180;
+    const r = 96;
+    const tx = Math.cos(angle) * r;
+    const ty = Math.sin(angle) * r;
+    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x', tx); txt.setAttribute('y', ty);
+    txt.setAttribute('text-anchor','middle'); txt.setAttribute('dominant-baseline','central');
+    txt.setAttribute('font-size','7'); txt.setAttribute('fill','#aaa');
+    txt.setAttribute('font-family','DM Sans, sans-serif');
+    txt.textContent = num;
+    seg.appendChild(txt);
+  });
+
+  // Bull outer (25)
+  const bo = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  bo.setAttribute('cx',0); bo.setAttribute('cy',0); bo.setAttribute('r',16);
+  bo.setAttribute('fill', colors.bullOuter);
+  seg.appendChild(bo);
+  // Bull inner (50)
+  const bi = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  bi.setAttribute('cx',0); bi.setAttribute('cy',0); bi.setAttribute('r',8);
+  bi.setAttribute('fill', colors.bull);
+  seg.appendChild(bi);
+}
+
+function makeArc(startDeg, endDeg, r1, r2, fill, num, type) {
+  const s1 = startDeg * Math.PI/180, e1 = endDeg * Math.PI/180;
+  const x1=Math.cos(s1)*r1, y1=Math.sin(s1)*r1;
+  const x2=Math.cos(e1)*r1, y2=Math.sin(e1)*r1;
+  const x3=Math.cos(e1)*r2, y3=Math.sin(e1)*r2;
+  const x4=Math.cos(s1)*r2, y4=Math.sin(s1)*r2;
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  const d = `M${x1},${y1} A${r1},${r1} 0 0,1 ${x2},${y2} L${x3},${y3} A${r2},${r2} 0 0,0 ${x4},${y4} Z`;
+  path.setAttribute('d', d);
+  path.setAttribute('fill', fill);
+  path.setAttribute('stroke', '#111'); path.setAttribute('stroke-width','0.5');
+  path.dataset.num = num; path.dataset.type = type;
+  return path;
+}
+
+function updateDartMarkers(darts) {
+  const el = document.getElementById('dart-markers');
+  if (!el) return;
+  el.innerHTML = '';
+  if (!darts || darts.length === 0) return;
+  const colors = ['#d4ff47','#47ffb2','#ff9f47'];
+  darts.forEach((d, i) => {
+    if (!d || d.mult === 'M') return;
+    const pos = dartToXY(d);
+    if (!pos) return;
+    // Outer glow
+    const glow = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    glow.setAttribute('cx', pos.x); glow.setAttribute('cy', pos.y); glow.setAttribute('r', 5);
+    glow.setAttribute('fill', colors[i]); glow.setAttribute('opacity','0.3');
+    el.appendChild(glow);
+    // Dot
+    const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    dot.setAttribute('cx', pos.x); dot.setAttribute('cy', pos.y); dot.setAttribute('r', 3);
+    dot.setAttribute('fill', colors[i]); dot.setAttribute('stroke','#09090f'); dot.setAttribute('stroke-width','1');
+    el.appendChild(dot);
+    // Number
+    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x', pos.x+5); txt.setAttribute('y', pos.y-5);
+    txt.setAttribute('font-size','6'); txt.setAttribute('fill', colors[i]);
+    txt.setAttribute('font-family','DM Sans,sans-serif'); txt.textContent = i+1;
+    el.appendChild(txt);
+  });
+}
+
+function dartToXY(dart) {
+  if (!dart || dart.mult === 'M') return null;
+  const num = dart.num;
+  let r;
+  if (num === 25) {
+    r = dart.mult === 'D' ? 5 : 12; // bull / outer bull
+    return { x: (Math.random()-0.5)*r*2, y: (Math.random()-0.5)*r*2 };
+  }
+  const idx = BOARD_ORDER.indexOf(num);
+  if (idx === -1) return null;
+  const angleDeg = idx * DEG - 90;
+  const angle = angleDeg * Math.PI/180;
+  // Pick radius based on mult, add slight random offset
+  const ranges = { S:[20, 54], D:[88, 100], T:[56, 68] };
+  const [rMin, rMax] = ranges[dart.mult] || [20,54];
+  r = rMin + Math.random()*(rMax-rMin);
+  const jitter = (Math.random()-0.5) * (DEG*0.6) * Math.PI/180;
+  return { x: Math.cos(angle+jitter)*r, y: Math.sin(angle+jitter)*r };
+}
+
+// ============ AVG BANNER UPDATE ============
+function updateAvgBanner() {
+  const p = state.players[state.turn];
+  if (!p) return;
+  const s = state.stats[p.name] || {};
+  const a = s.turns > 0 ? Math.round(s.total / s.turns * 3) : 0;
+  const avgEl = document.getElementById('avg-mine');
+  const highEl = document.getElementById('avg-high');
+  const turnsEl = document.getElementById('avg-turns');
+  if (avgEl) { avgEl.textContent = a; avgEl.style.color = a >= 100 ? 'var(--accent)' : a >= 60 ? 'var(--green)' : 'var(--text)'; }
+  if (highEl) highEl.textContent = s.high || 0;
+  if (turnsEl) turnsEl.textContent = s.turns || 0;
+  // Update dart markers with current turn darts
+  updateDartMarkers(dartTurn);
+}
 
 // ============ UNDO ============
 function undoTurn() {
@@ -1557,51 +1962,70 @@ function connectWS() {
   if (state.ws) { state.ws.close(); state.ws = null; }
   setStatus('st-status','loading','Verbinding maken...');
 
-  // Autodarts uses a WebSocket connection
-  // URL format: wss://api.autodarts.io/ms/v0/subscribe/board/{boardId}
-  const wsUrl = `wss://api.autodarts.io/ms/v0/subscribe/board/${board}`;
-  wsLog(`Verbinden met: ${wsUrl}`);
+  // Autodarts WebSocket — auth via ?api_key= query param
+  // Probeer meerdere endpoint formaten
+  const endpoints = [
+    `wss://api.autodarts.io/ms/v0/subscribe/board/${board}?api_key=${encodeURIComponent(token)}`,
+    `wss://api.autodarts.io/ms/v0/subscribe/board/${board}?token=${encodeURIComponent(token)}`,
+    `wss://api.autodarts.io/ms/v0/subscribe/board/${board}?key=${encodeURIComponent(token)}`,
+  ];
 
-  try {
-    const ws = new WebSocket(wsUrl, [], {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+  wsLog(`Board ID: ${board}`);
+  wsLog(`Verbinden...`);
 
-    // Note: Browser WebSocket doesn't support custom headers directly
-    // Autodarts uses token in URL query param as fallback
-    const ws2 = new WebSocket(`${wsUrl}?token=${encodeURIComponent(token)}`);
-
-    ws2.onopen = () => {
-      state.connected = true;
-      state.ws = ws2;
-      setStatus('st-status','success','Verbonden met Autodarts!');
-      wsLog('WebSocket verbonden ✓');
-      updateSettingsBadge();
-    };
-    ws2.onmessage = (e) => {
-      try {
-        const data = JSON.parse(e.data);
-        wsLog('Data: ' + JSON.stringify(data).slice(0,80));
-        handleAutodarts(data);
-      } catch(err) { wsLog('Parse fout: ' + e.data.slice(0,60)); }
-    };
-    ws2.onerror = () => {
+  function tryEndpoint(idx) {
+    if (idx >= endpoints.length) {
       state.connected = false;
-      setStatus('st-status','error','Verbinding mislukt — controleer je Board ID en token');
-      wsLog('WebSocket fout ✗');
+      setStatus('st-status','error','Verbinding mislukt — controleer Board ID en API Key');
+      wsLog('Alle endpoints gefaald ✗');
       updateSettingsBadge();
-    };
-    ws2.onclose = () => {
-      if (state.ws === ws2) {
-        state.connected = false;
-        wsLog('Verbinding gesloten');
+      return;
+    }
+    const url = endpoints[idx];
+    wsLog(`Poging ${idx+1}: ${url.split('?')[0]}`);
+    try {
+      const ws = new WebSocket(url);
+      let opened = false;
+      ws.onopen = () => {
+        opened = true;
+        state.connected = true;
+        state.ws = ws;
+        setStatus('st-status','success','Verbonden met Autodarts! ✓');
+        wsLog('Verbonden! ✓');
         updateSettingsBadge();
-      }
-    };
-  } catch(err) {
-    setStatus('st-status','error','Fout: ' + err.message);
-    wsLog('Fout: ' + err.message);
+      };
+      ws.onmessage = (e) => {
+        try {
+          const data = JSON.parse(e.data);
+          wsLog('← ' + JSON.stringify(data).slice(0,100));
+          handleAutodarts(data);
+        } catch(err) { wsLog('Parse fout: ' + e.data.slice(0,60)); }
+      };
+      ws.onerror = () => {
+        wsLog(`Poging ${idx+1} mislukt`);
+        if (!opened) tryEndpoint(idx+1);
+      };
+      ws.onclose = (e) => {
+        if (opened && state.ws === ws) {
+          state.connected = false;
+          wsLog(`Verbinding gesloten (code: ${e.code})`);
+          updateSettingsBadge();
+        }
+      };
+      // Timeout fallback
+      setTimeout(() => {
+        if (!opened && ws.readyState !== WebSocket.OPEN) {
+          ws.close();
+          tryEndpoint(idx+1);
+        }
+      }, 4000);
+    } catch(err) {
+      wsLog('Fout: ' + err.message);
+      tryEndpoint(idx+1);
+    }
   }
+
+  tryEndpoint(0);
 }
 
 function handleAutodarts(data) {
@@ -1715,6 +2139,8 @@ function init() {
 }
 
 init();
+drawBoard();
 </script>
+
 </body>
 </html>
